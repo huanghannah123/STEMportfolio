@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Hannah Huang, industrial engineering and product design portfolio.">
+<title>Hannah Huang</title>
+<link rel="canonical" href="https://huanghannah123.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hannah Huang">
+<meta property="og:description" content="Industrial engineering and product design: Medi-Pod, a gyroscope-stabilized cup holder, CAD work, and sketches.">
+<meta property="og:url" content="https://huanghannah123.github.io/">
+<meta property="og:image" content="https://huanghannah123.github.io/medipod/11-final-board.jpg">
+<meta property="og:image:alt" content="Hand-drawn presentation board for Medi-Pod, a medicine dispenser">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#ebede6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%232c5a6e'/%3E%3Crect x='4' y='4' width='56' height='56' fill='none' stroke='%23cf5a1f' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' text-anchor='middle' fill='%23ebede6'%3EHH%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,700;1,6..72,400&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Single light theme on purpose. Layout: a drafting sheet. Section labels sit in a left margin column like drawing callouts,
+     the hero carries a title block, and thin dimension lines replace decoration. Square edges only. */
+  :root {
+    --bg: #ebede6;        /* drafting paper, grey-green */
+    --sheet: #f1f2ec;     /* slightly lighter panel, still not white */
+    --fg: #1b211e;
+    --muted: #59615c;
+    --line: #c4c9bf;
+    --grid: #dde1d7;
+    --accent: #2c5a6e;    /* ink teal */
+    --mark: #cf5a1f;      /* marker orange, used sparingly */
+    color-scheme: light;
+    --display: "Newsreader", Georgia, "Times New Roman", serif;
+    --body: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    /* Type ramp: one scale, used everywhere */
+    --fs-xs: .75rem;    /* mono labels, captions */
+    --fs-sm: .875rem;   /* meta text */
+    --fs-base: 1rem;    /* secondary body */
+    --fs-body: 1.0625rem;
+    --fs-md: 1.25rem;   /* small headings */
+    --fs-lg: 1.5rem;    /* entry headings */
+    --fs-xl: clamp(1.5rem, 3.2vw, 2.25rem);
+    --fs-2xl: clamp(2.5rem, 5.5vw, 3.75rem);
+    --fs-hero: clamp(3rem, 11vw, 7rem);
+    /* Spacing: 4-point scale (4, 8, 12, 16, 24, 32, 48, 56, 64) */
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: var(--body); font-size: var(--fs-body); line-height: 1.6;
+    padding-inline: 20px; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:hover { text-decoration-thickness: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  .mono { font-family: var(--mono); }
+  .label { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+  /* Nav */
+  nav { border-bottom: 1px solid var(--fg); padding-block: 16px; }
+  nav .wrap { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; }
+  .mark { font-family: var(--display); font-weight: 500; font-size: var(--fs-md); color: var(--fg); text-decoration: none; }
+  .navlinks { display: flex; gap: 8px 24px; flex-wrap: wrap; font-family: var(--mono); font-size: var(--fs-sm); }
+  .navlinks a { color: var(--fg); text-decoration: none; }
+  .navlinks a:hover { text-decoration: underline; }
+
+  /* Hero on grid paper */
+  .hero {
+    margin-top: 32px; border: 1px solid var(--fg);
+    background-color: var(--sheet);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .hero-main { padding: clamp(32px, 6vw, 64px) clamp(20px, 5vw, 56px) clamp(32px, 5vw, 48px); display: grid; gap: 24px; }
+  .hero h1 { font-size: var(--fs-hero); font-weight: 400; line-height: 1; letter-spacing: -0.025em; }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero .role { font-family: var(--display); font-size: var(--fs-xl); max-width: 30ch; line-height: 1.4; }
+
+  /* Rotating inspection stamp in the hero corner */
+  .hero { position: relative; overflow: hidden; }
+  .stamp { position: absolute; top: clamp(18px, 4vw, 40px); right: clamp(18px, 4vw, 48px); width: clamp(120px, 16vw, 170px); aspect-ratio: 1; max-width: 100%; color: var(--mark); }
+  .stamp svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .stamp .ring { animation: spin 28s linear infinite; transform-origin: 50% 50%; transform-box: fill-box; }
+  .stamp text { font-family: var(--mono); font-size: 8.6px; letter-spacing: .16em; fill: currentColor; text-transform: uppercase; }
+  .stamp .core { font-family: var(--display); font-size: 30px; letter-spacing: 0; fill: currentColor; text-transform: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (max-width: 700px) { .stamp { width: 92px; top: 16px; right: 16px; } .hero-main { padding-top: 128px; } }
+
+  /* Dimension line: a rule with end ticks and a centred measurement label */
+  .dim { position: relative; display: flex; align-items: center; gap: 12px; color: var(--muted); max-width: 620px; }
+  .dim::before, .dim::after { content: ""; flex: 1; height: 1px; background: var(--muted); }
+  .dim span { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; text-align: center; min-width: 0; }
+  .hero-main > * { min-width: 0; }
+  .dim i { position: absolute; top: 50%; width: 2px; height: 14px; background: var(--mark); transform: translateY(-50%); }
+  .dim i:first-child { left: 0; } .dim i:last-child { right: 0; }
+
+  /* Title block, like the corner of an engineering drawing */
+  .titleblock { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--fg); background: var(--sheet); }
+  .titleblock > div { padding: 16px 16px; border-left: 1px solid var(--fg); display: grid; gap: 4px; min-width: 0; }
+  .titleblock > div:first-child { border-left: 0; }
+  .titleblock .value { font-size: var(--fs-base); }
+  .titleblock a { color: var(--fg); }
+
+  /* Figures strip */
+  .figures { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); }
+  .figures > div { padding: 32px 20px 24px 0; display: grid; gap: 8px; align-content: start; }
+  .figures > div + div { padding-left: 20px; border-left: 1px solid var(--line); }
+  .figures .num { font-family: var(--display); font-size: var(--fs-2xl); line-height: 1; color: var(--mark); font-variant-numeric: lining-nums tabular-nums; }
+  .figures p { font-size: var(--fs-sm); color: var(--muted); max-width: 26ch; }
+
+  /* Section rows: label in margin, content right */
+  section { padding-block: 56px; border-bottom: 1px solid var(--line); }
+  .row { display: grid; grid-template-columns: 200px 1fr; gap: 24px 48px; }
+  .row > aside { display: grid; gap: 8px; align-content: start; }
+  .row > aside h2 { font-size: var(--fs-lg); font-weight: 500; line-height: 1.15; }
+  .content { min-width: 0; display: grid; gap: 32px; }
+  .lede { color: var(--muted); max-width: 60ch; }
+
+  /* Education */
+  .school { font-size: var(--fs-xl); font-weight: 400; }
+  .spec { margin: 0; display: grid; grid-template-columns: 130px 1fr; border-top: 1px solid var(--line); }
+  .spec dt, .spec dd { margin: 0; padding-block: 12px; border-bottom: 1px solid var(--line); }
+  .spec dt { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: 16px; }
+  .spec dd { min-width: 0; }
+  .note { display: block; font-size: var(--fs-sm); color: var(--muted); }
+
+  /* Featured project */
+  .featured { display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: start; }
+  .featured h3 { font-size: var(--fs-2xl); font-weight: 400; line-height: 1; }
+  .featured .sub { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); }
+  .featured .intro { display: grid; gap: 16px; min-width: 0; }
+  .featured .intro p.big { font-family: var(--display); font-size: var(--fs-md); line-height: 1.4; }
+  .callouts { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--fg); }
+  .callouts li { position: relative; padding: 16px 0 16px 24px; border-bottom: 1px solid var(--line); display: grid; gap: 4px; }
+  .callouts li:last-child { border-bottom: 0; }
+  .callouts li::before { content: ""; position: absolute; left: 0; top: 24px; width: 14px; height: 2px; background: var(--mark); }
+  .callouts .label { font-size: var(--fs-xs); }
+
+  /* Process steps: a real sequence, so they are numbered */
+  .process { display: grid; gap: 16px; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); counter-reset: step; border-top: 2px solid var(--fg); }
+  .steps li { counter-increment: step; position: relative; padding: 16px 16px 8px 0; display: grid; gap: 4px; align-content: start; min-width: 0; }
+  .steps li + li { padding-left: 16px; border-left: 1px solid var(--line); }
+  .steps li::before { content: counter(step, decimal-leading-zero); font-family: var(--mono); font-size: var(--fs-xs); color: var(--mark); }
+  .steps strong { font-family: var(--display); font-size: var(--fs-md); font-weight: 500; line-height: 1.15; }
+  .steps span { font-size: var(--fs-base); color: var(--muted); }
+  .steps .when-s { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; color: var(--muted); }
+  .media { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .media figure { margin: 0; display: grid; gap: 8px; border: 1px solid var(--fg); background: var(--sheet); padding: 8px; }
+  .media img, .media video { width: 100%; max-width: 100%; height: auto; display: block; }
+  .media figcaption { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted); }
+  .tools { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted); }
+  .tools b { font-weight: 500; color: var(--mark); letter-spacing: .08em; text-transform: uppercase; margin-right: 8px; }
+  @media (max-width: 880px) { .steps { grid-template-columns: repeat(2, 1fr); } .steps li:nth-child(3) { padding-left: 0; border-left: 0; } .steps li:nth-child(n+3) { border-top: 1px solid var(--line); } }
+  @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } .steps li { padding-left: 0 !important; border-left: 0 !important; } .steps li + li { border-top: 1px solid var(--line); } }
+
+  /* Photo galleries */
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+  .gallery figure { margin: 0; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .gallery a, .gallery .frame { display: block; border: 1px solid var(--fg); background: var(--sheet); aspect-ratio: 4 / 3; overflow: hidden; max-width: 100%; }
+  .gallery img, .gallery video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gallery img.contain { object-fit: contain; background: var(--sheet); }
+  .gallery figcaption { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted); line-height: 1.4; }
+  .gallery.two { grid-template-columns: repeat(2, 1fr); }
+  .gallery.two a { aspect-ratio: 4 / 5; }
+  @media (max-width: 600px) { .gallery, .gallery.two { grid-template-columns: 1fr 1fr; } }
+
+
+  /* Medi-Pod: lead plate, process record, viewer */
+  .shot { display: block; width: 100%; padding: 0; margin: 0; border: 1px solid var(--fg); background: var(--sheet); overflow: hidden; cursor: zoom-in; aspect-ratio: var(--r, 4 / 3); border-radius: 0; }
+  .shot img, .shot video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  div.shot { cursor: default; }
+  .cap { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted); line-height: 1.4; }
+  .lead { margin: 0; display: grid; gap: 8px; }
+  .record { display: grid; counter-reset: stage; }
+  .record-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; padding-bottom: 12px; border-bottom: 2px solid var(--fg); }
+  .record-head h4 { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; line-height: 1.15; }
+  .stage { counter-increment: stage; display: grid; grid-template-columns: 176px 1fr; gap: 16px 32px; padding-block: 24px; border-bottom: 1px solid var(--line); }
+  .stage-text { display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .stage-text::before { content: counter(stage, decimal-leading-zero); font-family: var(--mono); font-size: var(--fs-xs); color: var(--mark); }
+  .stage h5 { margin: 0; font-family: var(--display); font-size: var(--fs-md); font-weight: 500; line-height: 1.15; }
+  .stage p { font-size: var(--fs-sm); color: var(--muted); }
+  .strip { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
+  .strip figure { margin: 0; flex: var(--r) 1 0%; min-width: 0; display: grid; gap: 8px; }
+  @media (max-width: 600px) {
+    .stage { grid-template-columns: 1fr; }
+    .strip { display: grid; grid-template-columns: 1fr 1fr; }
+    .strip figure.wide { grid-column: 1 / -1; }
+    .strip figure.wide .shot { max-height: 70vh; }
+  }
+  dialog.viewer { border: 1px solid var(--fg); border-radius: 0; background: var(--sheet); color: var(--fg); padding: 12px; width: min(1200px, 94vw); max-width: 94vw; max-height: 94vh; }
+  dialog.viewer::backdrop { background: rgba(235, 237, 230, .94); }
+  .viewer-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; padding-bottom: 12px; }
+  .viewer-bar div { display: flex; gap: 8px; }
+  .viewer img { display: block; width: 100%; height: auto; max-height: 76vh; object-fit: contain; background: var(--bg); }
+  .viewer .cap { padding-top: 12px; }
+  .viewer[open] img { animation: fadeUp .3s cubic-bezier(.2,.7,.2,1) both; }
+
+  /* Skip link for keyboard and screen-reader users */
+  .skip { position: absolute; left: 12px; top: -60px; z-index: 20; background: var(--fg); color: var(--bg); padding: 8px 12px; font-family: var(--mono); font-size: var(--fs-sm); }
+  .skip:focus { top: 12px; }
+
+  /* Experience log */
+  .log { list-style: none; margin: 0; padding: 0; }
+  .entry { display: grid; grid-template-columns: 170px 1fr; gap: 8px 32px; padding-block: 24px; border-top: 1px solid var(--line); }
+  .entry:first-child { border-top: 1px solid var(--fg); }
+  .when { display: grid; gap: 4px; align-content: start; font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); padding-top: 8px; font-variant-numeric: tabular-nums; }
+  .when strong { color: var(--fg); font-weight: 500; }
+  .entry-body { min-width: 0; display: grid; gap: 12px; }
+  .entry h3 { font-size: var(--fs-lg); font-weight: 500; line-height: 1.15; }
+  .entry .prog { font-weight: 500; }
+  .points { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; color: var(--muted); }
+  .points li::marker { content: "–  "; color: var(--mark); }
+
+  /* Activities */
+  .acts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 40px; }
+  .act { padding-block: 20px; border-top: 1px solid var(--line); display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .act h3 { font-size: var(--fs-md); font-weight: 500; }
+  .act p { color: var(--muted); font-size: var(--fs-base); }
+
+  /* Skills */
+  .skills { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); border-top: 1px solid var(--line); }
+  .skills li { padding: 12px 0; border-bottom: 1px solid var(--line); font-size: var(--fs-base); }
+  .certs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .certs li { padding-top: 16px; border-top: 1px solid var(--fg); display: grid; gap: 4px; align-content: start; min-width: 0; }
+  .certs strong { font-family: var(--display); font-size: var(--fs-md); font-weight: 500; line-height: 1.15; }
+  .certs span { color: var(--muted); font-size: var(--fs-base); }
+
+  /* Contact */
+  .contact h2.big { font-size: var(--fs-2xl); font-weight: 400; line-height: 1; }
+  .email-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 20px; padding-block: 16px; border-top: 1px solid var(--fg); border-bottom: 1px solid var(--fg); }
+  .email { font-family: var(--display); font-size: var(--fs-xl); user-select: all; word-break: break-all; min-width: 0; }
+  button.copy { font: 500 var(--fs-sm) var(--mono); cursor: pointer; border: 1px solid var(--fg); background: transparent; color: var(--fg); padding: 8px 12px; border-radius: 0; }
+  button.copy:hover { background: var(--fg); color: var(--bg); }
+  footer { padding-block: 24px 48px; color: var(--muted); font-size: var(--fs-xs); font-family: var(--mono); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 880px) {
+    .row { grid-template-columns: 1fr; }
+    .featured { grid-template-columns: 1fr; }
+    .certs { grid-template-columns: 1fr; gap: 20px; }
+    .titleblock { grid-template-columns: repeat(2, 1fr); }
+    .titleblock > div:nth-child(3) { border-left: 0; }
+    .titleblock > div:nth-child(n+3) { border-top: 1px solid var(--fg); }
+    .figures { grid-template-columns: repeat(2, 1fr); }
+    .figures > div:nth-child(3) { padding-left: 0; border-left: 0; }
+    .figures > div:nth-child(n+3) { border-top: 1px solid var(--line); }
+  }
+  @media (max-width: 600px) {
+    .entry { grid-template-columns: 1fr; }
+    .when { padding-top: 0; grid-auto-flow: column; justify-content: start; gap: 12px; }
+    .acts { grid-template-columns: 1fr; }
+    .spec { grid-template-columns: 1fr; }
+    .spec dt { border-bottom: 0; padding-bottom: 0; }
+    .titleblock { grid-template-columns: 1fr; }
+    .titleblock > div { border-left: 0 !important; }
+    .titleblock > div + div { border-top: 1px solid var(--fg); }
+  }
+  /* ---------- Motion ---------- */
+  #field { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  nav, main { position: relative; z-index: 1; }
+  .progress { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; height: 3px; width: 100%; background: var(--mark); transform-origin: 0 50%; transform: scaleX(0); z-index: 10; }
+
+  /* Name: letters rise into place once on load */
+  .hero h1 .ch { display: inline-block; animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes rise { from { transform: translateY(.45em); opacity: 0; } to { transform: none; opacity: 1; } }
+  .fade-in { animation: fadeUp .8s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes fadeUp { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  /* Dimension line draws outward from the label */
+  .dim::before { transform-origin: 100% 50%; animation: draw 1s .7s cubic-bezier(.6,0,.2,1) both; }
+  .dim::after { transform-origin: 0 50%; animation: draw 1s .7s cubic-bezier(.6,0,.2,1) both; }
+  .dim i { animation: fadeUp .4s 1.6s both; }
+  @keyframes draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  /* Scroll reveal: only applied by script to content below the first screen */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .callouts li::before { transform-origin: 0 50%; }
+  .reveal.in .callouts li::before { animation: draw .6s .3s both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+    #field, .progress { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#top">Skip to content</a>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <a class="mark" href="#top">Hannah Huang</a>
+    <div class="navlinks">
+      <a href="#medi-pod">Medi-Pod</a>
+      <a href="#experience">Experience</a>
+      <a href="#sketches">Sketches</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+  <header class="hero">
+    <div class="stamp" aria-hidden="true">
+      <svg viewBox="0 0 160 160">
+        <g class="ring">
+          <defs><path id="circ" d="M80,80 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0"/></defs>
+          <circle cx="80" cy="80" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="80" cy="80" r="48" fill="none" stroke="currentColor" stroke-width="1"/>
+          <text><textPath href="#circ">CAD Modeling · Prototyping · Human-Centered Design · </textPath></text>
+        </g>
+        <text class="core" x="80" y="91" text-anchor="middle">HH</text>
+      </svg>
+    </div>
+    <div class="hero-main">
+      <p class="label">Industrial Engineering &amp; Product Design</p>
+      <h1 id="name"><span class="w">Hannah</span><br><em class="w">Huang</em></h1>
+      <div class="dim"><i></i><span>CAD Modeling · Prototyping · Human-Centered Design</span><i></i></div>
+    </div>
+    <div class="titleblock">
+      <div><span class="label">Focus</span><span class="value">Industrial Engineering</span></div>
+      <div><span class="label">Also</span><span class="value">Human-Centered Design</span></div>
+      <div><span class="label">Based in</span><span class="value">Manhasset, NY</span></div>
+      <div><span class="label">Links</span><span class="value"><a href="https://www.linkedin.com/in/hannah-h-a89bb93b3" target="_blank" rel="noopener">LinkedIn</a> · <a href="#contact">Email</a></span></div>
+    </div>
+  </header>
+
+  <div class="figures" aria-label="Highlights">
+    <div><span class="num">55</span><p>elders and caregivers interviewed to validate Medi-Pod</p></div>
+    <div><span class="num">120</span><p>applicants for the Georgia Tech Pre-College Program</p></div>
+    <div><span class="num">150+</span><p>girls mentored worldwide through Girls Who Code</p></div>
+    <div><span class="num">4</span><p>person team co-led to build the gyroscope-stabilized cup holder</p></div>
+  </div>
+
+  <section id="medi-pod">
+    <div class="row">
+      <aside><span class="label">Featured project</span></aside>
+      <div class="content">
+        <div class="featured">
+          <div class="intro">
+            <h3>Medi-Pod</h3>
+            <p class="sub">Self-Led Pilot Project · Queens, NY · Sep to Oct 2026</p>
+            <p class="big">A 4-in-1 medicine dispenser for elderly users with memory loss.</p>
+            <p class="lede">An independent continuation of my Georgia Tech prototype with Allen Senior Home, revised around what users most reliably forget.</p>
+            <dl class="spec">
+              <dt>Tools</dt><dd>CAD, Design for Manufacturability (DFM), 3D Modeling &amp; Prototyping, User Research</dd>
+              <dt>Results</dt><dd>Validated with 55 elders and caregivers. Working prototype demoed to Georgia Tech faculty and peers, showing its full mechanical function and user flow.</dd>
+            </dl>
+          </div>
+          <ul class="callouts" aria-label="Medi-Pod features">
+            <li><span class="label">Compartments</span><span>One-push Morning, Noon, and Night</span></li>
+            <li><span class="label">Alarm</span><span>Pitched low enough to clear hearing aids</span></li>
+            <li><span class="label">Display</span><span>LCD screen that shows only the date</span></li>
+            <li><span class="label">Method</span><span>Prototyped in CAD with design-for-manufacturability (DFM) principles</span></li>
+            <li><span class="label">Testing</span><span>55 elders and caregivers at Allen Senior Home</span></li>
+          </ul>
+        </div>
+
+        <figure class="lead" id="medi-lead"></figure>
+
+        <div class="process">
+          <p class="label">How it developed</p>
+          <ol class="steps">
+            <li><span class="when-s">Summer 2026 · Georgia Tech</span><strong>Listen</strong><span>Ran direct user-research interviews with older adults and caregivers.</span></li>
+            <li><span class="when-s">Two-week sprint</span><strong>Model</strong><span>Turned their feedback into a fully 3D-modeled and animated CAD design.</span></li>
+            <li><span class="when-s">Summer 2026 · Georgia Tech</span><strong>Demo</strong><span>Presented a live demo of the working prototype to Georgia Tech faculty and peers.</span></li>
+            <li><span class="when-s">Sep to Oct 2026 · Allen Senior Home</span><strong>Revise</strong><span>Ran interviews and feedback sessions with 55 elders and caregivers, then revised the design in CAD with DFM principles.</span></li>
+          </ol>
+        </div>
+
+        <div class="record" id="process">
+          <div class="record-head">
+            <h4>Process record</h4>
+            <p class="cap">Georgia Tech Pre-College Program, Summer 2026. Select an image to enlarge it.</p>
+          </div>
+          <div id="stages"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="row">
+      <aside><span class="label">Experience</span><h2>Programs</h2></aside>
+      <div class="content">
+        <ol class="log" id="experience-list"></ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="sketches">
+    <div class="row">
+      <aside><span class="label">Drawing</span><h2>Sketchbook</h2></aside>
+      <div class="content">
+        <p class="lede">Freehand studies in perspective, construction lines, and shading.</p>
+        <div class="gallery two" id="sketch-gallery"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="row">
+      <aside><span class="label">Skills</span><h2>Skills and certifications</h2></aside>
+      <div class="content">
+        <ul class="skills">
+          <li>CAD (Certified)</li>
+          <li>Technical Drafting</li>
+          <li>SketchUp</li>
+          <li>3D Modeling &amp; Prototyping</li>
+          <li>Spatial Tolerancing</li>
+          <li>Design for Manufacturability (DFM)</li>
+          <li>Human-Centered Design</li>
+          <li>User Research</li>
+          <li>UI/UX Wireframing</li>
+        </ul>
+        <ul class="certs">
+          <li><span class="label">Feb 2025</span><strong>SketchUp Project Certificate (Engineering Design)</strong><span>Coursera</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="row">
+      <aside><span class="label">Contact</span></aside>
+      <div class="content">
+        <h2 class="big">Get in touch</h2>
+        <div class="email-line">
+          <span class="email" id="email">hannahhuang0407@gmail.com</span>
+          <button class="copy" id="copy-btn" type="button">Copy email</button>
+        </div>
+        <p><a href="https://www.linkedin.com/in/hannah-h-a89bb93b3" target="_blank" rel="noopener">linkedin.com/in/hannah-h-a89bb93b3</a></p>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="viewer" id="viewer" aria-label="Image viewer">
+    <div class="viewer-bar">
+      <span class="label" id="viewer-count"></span>
+      <div>
+        <button class="copy" type="button" id="viewer-prev">Previous</button>
+        <button class="copy" type="button" id="viewer-next">Next</button>
+        <button class="copy" type="button" id="viewer-close">Close</button>
+      </div>
+    </div>
+    <img id="viewer-img" alt="">
+    <p class="cap" id="viewer-cap"></p>
+  </dialog>
+
+  <footer><span>© <span id="year">2026</span> Hannah Huang</span><span>Manhasset, NY</span></footer>
+</main>
+
+<script>
+  // Programs, newest first. Edit text here.
+  const EXPERIENCE = [
+    {
+      org: "Georgia Institute of Technology",
+      tools: "CAD, 3D Modeling & Animation, User Research, Prototyping",
+      role: "Pre-College Program, selected from 120 applicants",
+      place: "Atlanta, GA",
+      date: "Summer 2026",
+      link: { href: "#process", text: "See the Medi-Pod process record" },
+      points: [
+        "Designed a working prototype of a four-in-one medicine dispenser, validated through direct user-research interviews with older adults and caregivers, translating that feedback into a fully 3D-modeled and animated CAD design within a two-week sprint.",
+        "Delivered a live product demo showing the dispenser's complete mechanical function and user flow to Georgia Tech faculty and peers, engineering interactive prototyping and iterating on user-tested design revisions."
+      ]
+    },
+    {
+      org: "The Cooper Union",
+      media: [
+        { src: "IMG_5050.jpeg", caption: "Cardboard mockup testing ring scale and clearance" },
+        { src: "IMG_5185.jpeg", caption: "Popsicle-stick frame reinforcing the pivot structure" },
+        { src: "IMG_5161.MOV", caption: "Testing pivot play on the frame" },
+        { src: "Screenshot 2026-05-14 150706.png", caption: "Exploded CAD view: cup, rings, and arm linkage", contain: true },
+        { src: "Screenshot 2026-05-14 150739.png", caption: "CAD model of the concentric gyroscope rings", contain: true },
+        { src: "Screenshot 2026-05-14 204738.png", caption: "CAD assembly with the support arm", contain: true }
+      ],
+      tools: "CAD, Technical Drafting, Spatial Tolerancing, DFM, Fabrication",
+      role: "Pre-College Engineering & Design Program",
+      place: "New York, NY",
+      date: "Jun to Aug 2025",
+      points: [
+        "Built a portfolio of technical drawings demonstrating precise spatial tolerancing and design-for-manufacturability (DFM) principles, validated through professional faculty review, through hands-on CAD modeling and technical drafting training.",
+        "Co-led a 4-person team to design and fabricate a gyroscope-stabilized cup holder that achieves self-correcting balance under motion, applying kinetic stability principles to a physical prototype build."
+      ]
+    },
+    {
+      org: "University of Pennsylvania",
+      tools: "Hardware-Software Integration, UI/UX Wireframing, Market Research, User Interviews",
+      role: "Social Innovation Program",
+      place: "Virtual",
+      date: "Oct 2024 to Feb 2025",
+      points: [
+        "Led the technical design of a smart pet camera and automated treat dispenser, validated by market research and user interviews confirming product demand, directing the hardware-software integration strategy.",
+        "Authored a complete mobile app blueprint spanning user flows and UI/UX wireframes, used to align the hardware and software design, mapping every touchpoint between the device and its companion app."
+      ]
+    },
+    {
+      org: "Girls Who Code",
+      tools: "JavaScript, Object-Oriented Programming, Data Science, Machine Learning Foundations",
+      role: "Technical Cohort Member & Peer Mentor",
+      place: "Virtual",
+      date: "Summer 2024 & 2025",
+      points: [
+        "Built interactive game characters and core gameplay logic from scratch in JavaScript, applying object-oriented programming principles to an original build, and completed advanced coursework in data science and machine learning foundations.",
+        "Mentored 150+ girls worldwide in coding fundamentals, measured by sustained Discord engagement and debugging support, leading peer troubleshooting sessions and confidence-building feedback."
+      ]
+    }
+  ];
+
+  // Medi-Pod process record. Files live in the medipod/ folder next to index.html.
+  const MEDIPOD = {
+    "lead": {
+      "src": "medipod/11-final-board.jpg",
+      "caption": "Final presentation board: digital widget for time, medication tracking, and date; removable modules on a thin magnetic charging tray.",
+      "r": 1.527
+    },
+    "stages": [
+      {
+        "title": "Discover and define",
+        "note": "Started with who is affected (older adults, caregivers) and when it happens: every day, at medication times. Problem statement: organizing medicine and taking it on time.",
+        "shots": [
+          {
+            "src": "medipod/01-discover-define-research.jpg",
+            "caption": "Discover, Define, and Research boards, with the must, should, could, will-not list",
+            "r": 0.75
+          },
+          {
+            "src": "medipod/02-mind-map.jpg",
+            "caption": "Mind map of daily life for elderly users, narrowed down to medication",
+            "r": 1.333
+          }
+        ]
+      },
+      {
+        "title": "Ideas",
+        "note": "One concept per sheet, each with what it got wrong. Idea 1, a magnetic weekly slider, only covered one time of the day.",
+        "shots": [
+          {
+            "src": "medipod/03-idea-weekly-slider.jpg",
+            "caption": "Idea 1: magnetic weekly slider for four medicines",
+            "r": 0.75
+          },
+          {
+            "src": "medipod/04-idea-clear-dome.jpg",
+            "caption": "Clear dome so the user can see the pill drop into the tray",
+            "r": 0.75
+          },
+          {
+            "src": "medipod/05-idea-weekly-columns.jpg",
+            "caption": "Weekly columns under a transparent lid",
+            "r": 0.75
+          },
+          {
+            "src": "medipod/06-ideas-refine-wall.jpg",
+            "caption": "Ideas and refine sheets pinned up together",
+            "r": 0.75
+          }
+        ]
+      },
+      {
+        "title": "Refine",
+        "note": "Split the day into separate Morning, Noon, and Night modules beside a date panel, then storyboarded one full use cycle in six frames.",
+        "shots": [
+          {
+            "src": "medipod/07-refined-sketch.jpg",
+            "caption": "Refined layout: name tags, push buttons, trays, clock and weekly widgets",
+            "r": 1.406
+          },
+          {
+            "src": "medipod/08-storyboard.jpg",
+            "caption": "Storyboard: reminder alert, press, dispense, record, next reminder",
+            "r": 1.776
+          }
+        ]
+      },
+      {
+        "title": "Prototype",
+        "note": "Built the four modules in foam board, each with a labeled push button and a tray underneath.",
+        "shots": [
+          {
+            "src": "medipod/09-foam-prototype.jpg",
+            "caption": "Foam-board prototype: date panel plus Morning, Noon, and Night",
+            "r": 1.333
+          },
+          {
+            "src": "medipod/10-foam-module.jpg",
+            "caption": "A single module shell before labels",
+            "r": 0.75
+          }
+        ]
+      },
+      {
+        "title": "Final design",
+        "note": "Rendered in marker: modules slide off a magnetic charging tray, each label holds a custom time, and an automatic tray presents the dose.",
+        "shots": [
+          {
+            "src": "medipod/12-final-rendering.jpg",
+            "caption": "Marker rendering of the final module set",
+            "r": 1.605
+          },
+          {
+            "src": "medipod/13-final-wall-brand.jpg",
+            "caption": "Final wall with storyboards, prototype, and the MP brand mark",
+            "r": 0.75
+          },
+          {
+            "src": "medipod/14-process-wall.jpg",
+            "caption": "The full process wall, Discover through Final",
+            "r": 1.333
+          }
+        ]
+      },
+      {
+        "title": "3D model",
+        "note": "Modeled the final design in Blender, then animated it.",
+        "shots": [
+          {
+            "src": "medipod/17-blender-animation.mp4",
+            "poster": "medipod/17-blender-animation-poster.jpg",
+            "caption": "Animated pass over the Blender model",
+            "r": 2.121
+          },
+          {
+            "src": "medipod/15-blender-model.jpg",
+            "caption": "Blender model: date panel, three modules, pull-out tray",
+            "r": 1.333
+          },
+          {
+            "src": "medipod/16-blender-textures.jpg",
+            "caption": "Label textures applied to the model",
+            "r": 1.656
+          }
+        ]
+      }
+    ]
+  };
+
+  // Photos and videos are hosted in the "portfolio" repository on GitHub
+  const MEDIA_BASE = "https://huanghannah123.github.io/portfolio/";
+  const SKETCHES = [
+    { src: "IMG_4553.jpeg", caption: "One-point perspective street scene" },
+    { src: "IMG_4555.jpeg", caption: "Three-stage form shading study" }
+  ];
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  const url = f => MEDIA_BASE + encodeURIComponent(f);
+  const figure = m => /\.(mp4|webm|mov)$/i.test(m.src)
+    ? `<figure><div class="frame"><video src="${url(m.src)}" autoplay loop muted playsinline preload="metadata" aria-label="${esc(m.caption)}"></video></div><figcaption>${esc(m.caption)}</figcaption></figure>`
+    : `<figure><a href="${url(m.src)}" target="_blank" rel="noopener"><img src="${url(m.src)}" alt="${esc(m.caption)}" loading="lazy"${m.contain ? ' class="contain"' : ""}></a><figcaption>${esc(m.caption)}</figcaption></figure>`;
+  document.getElementById("experience-list").innerHTML = EXPERIENCE.map(e => `
+    <li class="entry">
+      <div class="when"><strong>${esc(e.date)}</strong><span>${esc(e.place)}</span></div>
+      <div class="entry-body">
+        <h3>${esc(e.org)}</h3>
+        <p class="prog">${esc(e.role)}</p>
+        <ul class="points">${e.points.map(p => `<li>${esc(p)}</li>`).join("")}</ul>
+        ${e.tools ? `<p class="tools"><b>Tools</b>${esc(e.tools)}</p>` : ""}
+        ${e.link ? `<p><a href="${esc(e.link.href)}">${esc(e.link.text)}</a></p>` : ""}
+        ${e.media ? `<div class="gallery">${e.media.map(figure).join("")}</div>` : ""}
+      </div>
+    </li>`).join("");
+
+  document.getElementById("sketch-gallery").innerHTML = SKETCHES.map(figure).join("");
+
+  // Medi-Pod lead plate, stages, and the image viewer
+  const VIEW = [];
+  const shotHTML = (m, cls = "") => {
+    const style = `style="--r:${m.r}"`;
+    if (/\.mp4$/i.test(m.src)) return `<figure class="${cls}" ${style}><div class="shot"><video src="${esc(m.src)}" poster="${esc(m.poster || "")}" muted loop playsinline preload="metadata" aria-label="${esc(m.caption)}"></video></div><figcaption class="cap">${esc(m.caption)}</figcaption></figure>`;
+    const i = VIEW.push(m) - 1;
+    return `<figure class="${cls}" ${style}><button class="shot" type="button" data-i="${i}" aria-label="Enlarge: ${esc(m.caption)}"><img src="${esc(m.src)}" alt="${esc(m.caption)}" loading="lazy" decoding="async"></button><figcaption class="cap">${esc(m.caption)}</figcaption></figure>`;
+  };
+  const lead = document.getElementById("medi-lead");
+  lead.outerHTML = shotHTML(MEDIPOD.lead, "lead").replace("<figure", '<figure id="medi-lead"');
+  document.getElementById("stages").innerHTML = MEDIPOD.stages.map(st => `
+    <div class="stage">
+      <div class="stage-text"><h5>${esc(st.title)}</h5><p>${esc(st.note)}</p></div>
+      <div class="strip">${(() => {
+        // On phones, landscape images run full width and portraits pair up; a portrait left without a partner runs full width too
+        const tall = st.shots.filter(m => m.r < 1.2).length;
+        return st.shots.map(m => shotHTML(m, m.r >= 1.2 || tall % 2 ? "wide" : "")).join("");
+      })()}</div>
+    </div>`).join("");
+
+  const viewer = document.getElementById("viewer");
+  const vImg = document.getElementById("viewer-img"), vCap = document.getElementById("viewer-cap"), vCount = document.getElementById("viewer-count");
+  let cur = 0;
+  const show = i => {
+    cur = (i + VIEW.length) % VIEW.length;
+    const m = VIEW[cur];
+    vImg.src = m.src; vImg.alt = m.caption; vCap.textContent = m.caption;
+    vCount.textContent = `${cur + 1} of ${VIEW.length}`;
+  };
+  document.addEventListener("click", e => {
+    const b = e.target.closest("button.shot");
+    if (!b) return;
+    show(+b.dataset.i);
+    if (viewer.showModal) viewer.showModal(); else window.open(VIEW[cur].src, "_blank", "noopener");
+  });
+  document.getElementById("viewer-prev").onclick = () => show(cur - 1);
+  document.getElementById("viewer-next").onclick = () => show(cur + 1);
+  document.getElementById("viewer-close").onclick = () => viewer.close();
+  viewer.addEventListener("click", e => { if (e.target === viewer) viewer.close(); });
+  viewer.addEventListener("keydown", e => {
+    if (e.key === "ArrowLeft") show(cur - 1);
+    if (e.key === "ArrowRight") show(cur + 1);
+  });
+
+  // The Blender clip loops when on screen; with reduced motion it waits for the play control
+  const calmVideo = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll(".strip video").forEach(v => {
+    if (calmVideo || !("IntersectionObserver" in window)) { v.controls = true; return; }
+    new IntersectionObserver(([en]) => en.isIntersecting ? v.play().catch(() => { v.controls = true; }) : v.pause(), { threshold: 0.3 }).observe(v);
+  });
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const btn = document.getElementById("copy-btn");
+  btn.addEventListener("click", () => {
+    const email = document.getElementById("email").textContent.trim();
+    const done = () => { btn.textContent = "Copied"; setTimeout(() => btn.textContent = "Copy email", 1800); };
+    const fallback = () => {
+      const r = document.createRange(); r.selectNodeContents(document.getElementById("email"));
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      btn.textContent = "Selected. Press Ctrl+C";
+    };
+    if (navigator.clipboard) navigator.clipboard.writeText(email).then(done, fallback); else fallback();
+  });
+  /* ---------- Motion ---------- */
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Split the name into letters so each one rises in turn
+  if (!calm) {
+    let i = 0;
+    document.querySelectorAll("#name .w").forEach(w => {
+      w.innerHTML = [...w.textContent].map(c => `<span class="ch" style="animation-delay:${(i++ * 0.045).toFixed(3)}s">${c}</span>`).join("");
+    });
+    const hm = document.querySelectorAll(".hero-main > :not(h1), .titleblock > div");
+    hm.forEach((el, k) => { el.classList.add("fade-in"); el.style.animationDelay = (0.5 + k * 0.08) + "s"; });
+  }
+
+  // Reveal sections and count up figures as they scroll into view
+  const countUp = el => {
+    const raw = el.textContent, target = parseInt(raw, 10), suffix = raw.replace(/\d+/, "");
+    const t0 = performance.now(), dur = 1200;
+    const step = now => {
+      const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * e) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  if (!calm && "IntersectionObserver" in window) {
+    const targets = document.querySelectorAll("section .content > *, section aside, .figures > div, .entry, .act, .certs li");
+    const io = new IntersectionObserver(entries => entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      en.target.classList.add("in");
+      en.target.querySelectorAll(".num").forEach(countUp);
+      io.unobserve(en.target);
+    }), { threshold: 0.15 });
+    targets.forEach(el => {
+      if (el.getBoundingClientRect().top > innerHeight * 0.92) { el.classList.add("reveal"); io.observe(el); }
+      else if (el.querySelector(".num")) setTimeout(() => countUp(el.querySelector(".num")), 900);
+    });
+  }
+
+  // Scroll progress hairline
+  const bar = document.getElementById("progress");
+  const onScroll = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+  };
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  // Background: slow drifting construction points joined by faint lines, like a drafting layout
+  (() => {
+    const cv = document.getElementById("field");
+    if (calm || !cv.getContext) return;
+    const ctx = cv.getContext("2d");
+    let W, H, dpr, pts = [];
+    const ink = () => getComputedStyle(document.documentElement).getPropertyValue("--muted").trim() || "#59615c";
+    let color = ink();
+    const resize = () => {
+      dpr = Math.min(devicePixelRatio || 1, 2);
+      W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr;
+      const n = Math.round(Math.min(70, (innerWidth * innerHeight) / 22000));
+      pts = Array.from({ length: n }, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - .5) * .18 * dpr, vy: (Math.random() - .5) * .18 * dpr
+      }));
+    };
+    resize(); addEventListener("resize", resize);
+    const link = 150;
+    const frame = () => {
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = color; ctx.fillStyle = color;
+      const L = link * dpr;
+      for (const p of pts) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+      }
+      for (let a = 0; a < pts.length; a++) {
+        const p = pts[a];
+        for (let b = a + 1; b < pts.length; b++) {
+          const q = pts[b], dx = p.x - q.x, dy = p.y - q.y, d = Math.hypot(dx, dy);
+          if (d < L) { ctx.globalAlpha = (1 - d / L) * 0.22; ctx.lineWidth = dpr * .7; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke(); }
+        }
+        // small cross marks instead of dots, like construction points on a drawing
+        ctx.globalAlpha = 0.35; ctx.lineWidth = dpr * .8; const s = 3 * dpr;
+        ctx.beginPath(); ctx.moveTo(p.x - s, p.y); ctx.lineTo(p.x + s, p.y); ctx.moveTo(p.x, p.y - s); ctx.lineTo(p.x, p.y + s); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      if (!document.hidden) requestAnimationFrame(frame); else setTimeout(() => requestAnimationFrame(frame), 500);
+    };
+    requestAnimationFrame(frame);
+  })();
+</script>
+</body>
+</html>
