@@ -237,19 +237,35 @@
   dialog.viewer { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; color: var(--fg); overflow: hidden; }
   dialog.viewer::backdrop { background: transparent; }
   .viewer-scrim { position: absolute; inset: 0; background: var(--bg); opacity: 0; }
-  .viewer-stage { position: absolute; inset: 4.5rem 1rem 5.5rem; display: flex; align-items: center; justify-content: center; touch-action: none; }
-  .viewer-stage img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; border: 1px solid var(--fg); background: var(--sheet); transform-origin: 50% 50%; will-change: transform, opacity; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
+  .viewer-stage { position: absolute; inset: 4.5rem 1rem 6rem; display: flex; align-items: center; justify-content: center; touch-action: none; }
+  .viewer-stage img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; border: 1px solid var(--fg); background: var(--sheet); transform-origin: 50% 50%; cursor: zoom-in; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
   .viewer-stage img:active { cursor: grabbing; }
+  .viewer-stage.zoomed img { cursor: grab; }
+  .viewer-stage.zoomed img:active { cursor: grabbing; }
   .viewer-bar {
     position: absolute; inset: 0 0 auto 0; z-index: 2; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 0.5rem;
     padding: max(0.75rem, env(safe-area-inset-top)) 1rem 0.75rem;
     background: var(--material); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
   }
-  .viewer-bar #viewer-close { justify-self: start; }
+  .viewer-left { justify-self: start; display: flex; gap: 0.5rem; }
+  .viewer-zoom { display: flex; gap: 0.5rem; }
+  .viewer-zoom button { min-width: 2.25rem; padding-inline: 0.5rem; font-size: var(--fs-base); line-height: 1; }
+  button.copy:disabled { opacity: .35; cursor: default; }
+  button.copy:disabled:active { background: transparent; color: var(--fg); transform: none; }
   .viewer-bar .count { font-size: var(--fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
   .viewer-nav { justify-self: end; display: flex; gap: 0.5rem; }
   .viewer-nav button[hidden] { display: none; }
-  .viewer-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; margin: 0 auto; max-width: 70ch; padding: 1rem 1rem max(1rem, env(safe-area-inset-bottom)); text-align: center; }
+  .viewer-foot { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 0.75rem 1rem max(0.75rem, env(safe-area-inset-bottom)); text-align: center; display: grid; gap: 0.25rem; justify-items: center; pointer-events: none;
+    background: var(--material); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%); }
+  .viewer-foot .cap { max-width: 70ch; color: var(--fg); }
+  .viewer-hint { margin: 0; font-size: var(--fs-xs); color: var(--muted); }
+  .viewer-hint .touch { display: none; }
+  /* Touch screens pinch instead of using buttons */
+  @media (hover: none) and (pointer: coarse) {
+    .viewer-zoom { display: none; }
+    .viewer-hint .mouse { display: none; }
+    .viewer-hint .touch { display: inline; }
+  }
 
   /* Skip link for keyboard and screen-reader users */
   .skip { position: absolute; left: 12px; top: -60px; z-index: 20; background: var(--fg); color: var(--bg); padding: 0.5rem 0.75rem; font-size: var(--fs-sm); }
@@ -332,14 +348,14 @@
   }
   /* Less transparency: floating chrome turns solid */
   @media (prefers-reduced-transparency: reduce) {
-    nav, .viewer-bar { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+    nav, .viewer-bar, .viewer-foot { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
     nav::after { display: none; }
     nav.edge { border-bottom: 1px solid var(--line); }
   }
   /* More contrast: solid chrome with a defined edge, darker rules */
   @media (prefers-contrast: more) {
     :root { --line: #6f766c; --material: var(--bg); }
-    nav, .viewer-bar { -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 1px solid var(--fg); }
+    nav, .viewer-bar, .viewer-foot { -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 1px solid var(--fg); }
     nav::after { display: none; }
   }
 </style>
@@ -492,14 +508,23 @@
     <div class="viewer-scrim" id="viewer-scrim"></div>
     <div class="viewer-stage" id="viewer-stage"><img id="viewer-img" alt="" draggable="false"></div>
     <div class="viewer-bar" id="viewer-bar">
-      <button class="copy" type="button" id="viewer-close">Close</button>
+      <div class="viewer-left">
+        <button class="copy" type="button" id="viewer-close">Close</button>
+        <div class="viewer-zoom">
+          <button class="copy" type="button" id="viewer-zoom-out" aria-label="Zoom out">&minus;</button>
+          <button class="copy" type="button" id="viewer-zoom-in" aria-label="Zoom in">+</button>
+        </div>
+      </div>
       <span class="count" id="viewer-count" aria-live="polite"></span>
       <div class="viewer-nav">
         <button class="copy" type="button" id="viewer-prev">Previous</button>
         <button class="copy" type="button" id="viewer-next">Next</button>
       </div>
     </div>
-    <p class="cap viewer-cap" id="viewer-cap"></p>
+    <div class="viewer-foot" id="viewer-foot">
+      <p class="cap viewer-cap" id="viewer-cap"></p>
+      <p class="viewer-hint"><span class="mouse">Scroll to zoom. Double-click to zoom in or out. Drag to move around.</span><span class="touch">Pinch to zoom. Double-tap to zoom in or out.</span></p>
+    </div>
   </dialog>
 
   <footer><span>© <span id="year">2026</span> Hannah Huang</span><span>Manhasset, NY</span></footer>
@@ -811,18 +836,27 @@
 
   /* ---------- Viewer ----------
      The photo grows out of the thumbnail you pressed and goes back into it. Drag sideways for the next photo,
-     drag down to put it away. Release velocity carries straight into the spring, so there is no seam. */
+     drag down to put it away. Zoom with the scroll wheel, a trackpad or two-finger pinch, the + and - buttons,
+     or a double-click / double-tap; while zoomed in, drag to move around the photo.
+     Release velocity carries straight into the spring, so there is no seam. */
   const viewer = document.getElementById("viewer"), stage = document.getElementById("viewer-stage");
   const vImg = document.getElementById("viewer-img"), vCap = document.getElementById("viewer-cap"), vCount = document.getElementById("viewer-count");
-  const scrim = document.getElementById("viewer-scrim"), chrome = [document.getElementById("viewer-bar"), vCap];
+  const scrim = document.getElementById("viewer-scrim"), chrome = [document.getElementById("viewer-bar"), document.getElementById("viewer-foot")];
   const prevBtn = document.getElementById("viewer-prev"), nextBtn = document.getElementById("viewer-next");
-  const V = { x: 0, y: 0, s: 1, o: 0, io: 1 };
+  const zoomInBtn = document.getElementById("viewer-zoom-in"), zoomOutBtn = document.getElementById("viewer-zoom-out");
+  // x, y, s: placement (open, close, swipe, dismiss). z, px, py: zoom level and the pan while zoomed.
+  const V = { x: 0, y: 0, s: 1, o: 0, io: 1, z: 1, px: 0, py: 0 };
+  const ZMIN = 1, ZMAX = 4;
   const clamp01 = n => Math.max(0, Math.min(1, n));
+  const clampZ = z => Math.max(ZMIN, Math.min(ZMAX, z));
   const renderV = () => {
-    vImg.style.transform = `translate3d(${V.x}px, ${V.y}px, 0) scale(${V.s})`;
+    vImg.style.transform = `translate3d(${V.x + V.px}px, ${V.y + V.py}px, 0) scale(${V.s * V.z})`;
     vImg.style.opacity = clamp01(V.io);
     scrim.style.opacity = clamp01(V.o) * 0.97;
     chrome.forEach(c => { c.style.opacity = clamp01(V.o); });
+    stage.classList.toggle("zoomed", V.z > 1.01);
+    zoomInBtn.disabled = V.z >= ZMAX - 0.01;
+    zoomOutBtn.disabled = V.z <= ZMIN + 0.01;
   };
   const vs = springSystem(V, renderV);
   let cur = -1, gen = 0, hiddenThumb = null;
@@ -842,27 +876,78 @@
   };
   // Untransformed image box, worked out from the live (transformed) one
   const baseRect = () => {
-    const r = vImg.getBoundingClientRect(), w = r.width / V.s, h = r.height / V.s;
-    const cx = r.left + r.width / 2 - V.x, cy = r.top + r.height / 2 - V.y;
-    return { left: cx - w / 2, top: cy - h / 2, width: w, height: h };
+    const r = vImg.getBoundingClientRect(), k = V.s * V.z, w = r.width / k, h = r.height / k;
+    const cx = r.left + r.width / 2 - V.x - V.px, cy = r.top + r.height / 2 - V.y - V.py;
+    return { left: cx - w / 2, top: cy - h / 2, width: w, height: h, cx, cy };
   };
   // Transform that lays the full photo over a thumbnail (cover-fit, like the thumbnail crop)
   const overThumb = th => {
     const t = th.getBoundingClientRect(), b = baseRect();
     return {
-      x: t.left + t.width / 2 - (b.left + b.width / 2),
-      y: t.top + t.height / 2 - (b.top + b.height / 2),
+      x: t.left + t.width / 2 - b.cx,
+      y: t.top + t.height / 2 - b.cy,
       s: Math.max(t.width / b.width, t.height / b.height)
     };
   };
   const onScreen = el => { if (!el) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.bottom > 0 && r.top < innerHeight; };
 
+  /* ---------- Zoom ---------- */
+  // How far the photo may move at a zoom level: its edges can reach the screen edges, never past them
+  const panLimit = z => {
+    const b = baseRect();
+    return { x: Math.max(0, (b.width * z - innerWidth) / 2), y: Math.max(0, (b.height * z - innerHeight) / 2) };
+  };
+  const clampPan = (v, l) => Math.max(-l, Math.min(l, v));
+  const bandPan = (v, l, dim) => (v > l ? l + rubberband(v - l, dim) : v < -l ? -l - rubberband(-l - v, dim) : v);
+  // Pan that keeps the point under the cursor (or between the fingers) fixed while the zoom changes
+  const panFor = (cx, cy, z2) => {
+    const b = baseRect(), k = z2 / V.z;
+    const dx = cx - (b.cx + V.x + V.px), dy = cy - (b.cy + V.y + V.py);
+    return { px: V.px + dx * (1 - k), py: V.py + dy * (1 - k) };
+  };
+  // Direct zoom (wheel, pinch): follows the input 1:1, no animation
+  const zoomNow = (cx, cy, z2, clamp = true) => {
+    vs.stop("z", "px", "py");
+    const p = panFor(cx, cy, z2);
+    V.z = z2;
+    const l = panLimit(z2);
+    V.px = clamp ? clampPan(p.px, l.x) : p.px; V.py = clamp ? clampPan(p.py, l.y) : p.py;
+    renderV();
+  };
+  // Animated zoom (buttons, double-click, settling after a pinch)
+  const zoomTo = (cx, cy, z2) => {
+    z2 = clampZ(z2);
+    const p = panFor(cx, cy, z2), l = panLimit(z2);
+    const tx = clampPan(p.px, l.x), ty = clampPan(p.py, l.y);
+    if (calm) { vs.stop("z", "px", "py"); Object.assign(V, { z: z2, px: tx, py: ty }); renderV(); return; }
+    vs.to("z", z2, { response: 0.35, eps: 0.001 }); vs.to("px", tx, { response: 0.35 }); vs.to("py", ty, { response: 0.35 });
+  };
+  const resetZoom = (animate = true) => {
+    if (animate && !calm) { vs.to("z", 1, { response: 0.35, eps: 0.001 }); vs.to("px", 0, { response: 0.35 }); vs.to("py", 0, { response: 0.35 }); }
+    else { vs.stop("z", "px", "py"); Object.assign(V, { z: 1, px: 0, py: 0 }); renderV(); }
+  };
+  const zoomed = () => V.z > 1.01;
+  const screenMid = () => { const r = stage.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+  const toggleZoom = (cx, cy) => (zoomed() ? resetZoom() : zoomTo(cx, cy, 2.5));
+
+  // Mouse wheel zooms around the cursor; a trackpad pinch arrives as ctrl + wheel and zooms faster
+  viewer.addEventListener("wheel", e => {
+    if (!viewer.open) return;
+    e.preventDefault();
+    const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? innerHeight : 1;
+    const k = e.ctrlKey ? 0.01 : 0.0018;
+    const z2 = clampZ(V.z * Math.exp(-e.deltaY * unit * k));
+    if (z2 !== V.z) zoomNow(e.clientX, e.clientY, z2);
+  }, { passive: false });
+  zoomInBtn.addEventListener("click", () => { const [cx, cy] = screenMid(); zoomTo(cx, cy, V.z * 1.6); });
+  zoomOutBtn.addEventListener("click", () => { const [cx, cy] = screenMid(); V.z / 1.6 <= 1.05 ? resetZoom() : zoomTo(cx, cy, V.z / 1.6); });
+
   async function openAt(i) {
     const g = ++gen;
     setItem(i);
     if (!viewer.open) { viewer.showModal(); document.documentElement.classList.add("viewing"); }
-    vs.stop("x", "y", "s", "o", "io");
-    Object.assign(V, { x: 0, y: 0, s: 1, o: 0, io: calm ? 0 : 1 }); renderV();
+    vs.stop("x", "y", "s", "o", "io", "z", "px", "py");
+    Object.assign(V, { x: 0, y: 0, s: 1, o: 0, io: calm ? 0 : 1, z: 1, px: 0, py: 0 }); renderV();
     await ready(); if (g !== gen) return;
     const th = thumbFor(i);
     if (calm || !th) {
@@ -874,20 +959,21 @@
   }
 
   function finishClose() {
-    vs.stop("x", "y", "s", "o", "io");
+    vs.stop("x", "y", "s", "o", "io", "z", "px", "py");
     if (hiddenThumb) hiddenThumb.style.visibility = "";
     hiddenThumb = null;
     viewer.close(); document.documentElement.classList.remove("viewing");
-    Object.assign(V, { x: 0, y: 0, s: 1, o: 0, io: 1 }); renderV();
+    Object.assign(V, { x: 0, y: 0, s: 1, o: 0, io: 1, z: 1, px: 0, py: 0 }); renderV();
   }
   async function closeViewer(vel = {}) {
     if (!viewer.open) return;
     const g = ++gen, th = thumbFor(cur);
     let moves;
     if (!calm && onScreen(th)) {
-      // Leave the way it came in: back into its thumbnail
+      // Leave the way it came in: back into its thumbnail, zooming back out on the way
       const t = overThumb(th);
-      moves = [vs.to("x", t.x, { velocity: vel.x }), vs.to("y", t.y, { velocity: vel.y }), vs.to("s", t.s, { eps: 0.002 }), vs.to("o", 0, { response: 0.3, eps: 0.01 })];
+      moves = [vs.to("x", t.x, { velocity: vel.x }), vs.to("y", t.y, { velocity: vel.y }), vs.to("s", t.s, { eps: 0.002 }), vs.to("o", 0, { response: 0.3, eps: 0.01 }),
+               vs.to("z", 1, { eps: 0.002 }), vs.to("px", 0), vs.to("py", 0)];
     } else {
       moves = [vs.to("o", 0, { response: 0.25, eps: 0.01 }), vs.to("io", 0, { response: 0.25, eps: 0.01 })];
       if (!calm) moves.push(vs.to("s", 0.94, { eps: 0.002 }));
@@ -902,50 +988,91 @@
     const g = ++gen, next = list[(list.indexOf(cur) + dir + list.length) % list.length];
     if (calm) {
       await vs.to("io", 0, { response: 0.2, eps: 0.01 }); if (g !== gen) return;
-      setItem(next); Object.assign(V, { x: 0, y: 0, s: 1 }); await ready(); if (g !== gen) return;
+      setItem(next); Object.assign(V, { x: 0, y: 0, s: 1 }); resetZoom(false); await ready(); if (g !== gen) return;
       vs.to("io", 1, { response: 0.2, eps: 0.01 }); vs.to("o", 1, { response: 0.2, eps: 0.01 });
       return;
     }
     vs.to("y", 0); vs.to("s", 1, { eps: 0.001 }); vs.to("o", 1, { response: 0.3, eps: 0.01 });
+    resetZoom();   // a zoomed photo zooms back out as it leaves
     // Current photo leaves on the side you pushed it; the next one arrives from the other side, same direction of travel
     const off = w => innerWidth / 2 + w / 2 + 16;
     const left = await vs.to("x", -dir * off(baseRect().width), { velocity: v, response: 0.3, near: 48 });
     if (!left || g !== gen) return;
     const carry = vs.velocity("x"); vs.stop("x");
+    resetZoom(false);
     setItem(next); await ready(); if (g !== gen) return;
     V.x = dir * off(baseRect().width); renderV();
     vs.to("x", 0, { velocity: carry, response: 0.35 });
   }
 
   const settle = (vx = 0, vy = 0) => {
-    if (calm) { Object.assign(V, { x: 0, y: 0, s: 1 }); vs.to("o", 1, { response: 0.2, eps: 0.01 }); vs.to("io", 1, { response: 0.2, eps: 0.01 }); return; }
+    if (calm) { Object.assign(V, { x: 0, y: 0, s: 1 }); vs.to("o", 1, { response: 0.2, eps: 0.01 }); vs.to("io", 1, { response: 0.2, eps: 0.01 }); renderV(); return; }
     // A little bounce only when the gesture itself carried momentum
     const thrown = Math.hypot(vx, vy) > 200, opts = { damping: thrown ? 0.8 : 1, response: 0.3 };
     vs.to("x", 0, { ...opts, velocity: vx }); vs.to("y", 0, { ...opts, velocity: vy });
     vs.to("s", 1, { response: 0.3, eps: 0.001 }); vs.to("o", 1, { response: 0.3, eps: 0.01 }); vs.to("io", 1, { response: 0.2, eps: 0.01 });
   };
 
-  let drag = null;
+  /* ---------- Pointers: one finger or the mouse drags; two fingers pinch ---------- */
+  const pointers = new Map();
+  let drag = null, pinch = null, lastTap = null;
+  const twoFingers = () => {
+    const [a, b] = [...pointers.values()];
+    return { mid: [(a.x + b.x) / 2, (a.y + b.y) / 2], dist: Math.hypot(a.x - b.x, a.y - b.y) || 1 };
+  };
   stage.addEventListener("pointerdown", e => {
     if (e.button !== 0 || !viewer.open) return;
     stage.setPointerCapture(e.pointerId);
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.size === 2) {
+      // Second finger down: switch to a pinch. Anything the first finger had started springs back.
+      if (drag && drag.axis && drag.axis !== "pan") settle();
+      drag = null; ++gen;
+      vs.stop("z", "px", "py");
+      const f = twoFingers();
+      pinch = { ...f, zr: V.z };
+      return;
+    }
+    if (pointers.size > 2 || pinch) return;
     drag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, axis: null, onImg: e.target === vImg, hist: [[e.timeStamp, e.clientX, e.clientY]] };
     // Grabbing the photo mid-flight stops it exactly where it is on screen
-    if (drag.onImg) { ++gen; vs.stop("x", "y", "s"); }
+    if (drag.onImg) { ++gen; vs.stop("x", "y", "s", "px", "py"); }
   });
   stage.addEventListener("pointermove", e => {
+    if (!pointers.has(e.pointerId)) return;
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pinch) {
+      if (pointers.size < 2) return;
+      const f = twoFingers();
+      pinch.zr *= f.dist / pinch.dist;
+      // Past the limits the zoom resists instead of stopping dead, then settles back on release
+      const zr = pinch.zr, z2 = zr < ZMIN ? ZMIN - (ZMIN - zr) * 0.4 : zr > ZMAX ? ZMAX + (zr - ZMAX) * 0.4 : zr;
+      zoomNow(f.mid[0], f.mid[1], z2, false);
+      V.px += f.mid[0] - pinch.mid[0]; V.py += f.mid[1] - pinch.mid[1];   // the photo also travels with the fingers
+      renderV();
+      pinch.dist = f.dist; pinch.mid = f.mid;
+      return;
+    }
     if (!drag || e.pointerId !== drag.id) return;
     drag.hist.push([e.timeStamp, e.clientX, e.clientY]);
     while (drag.hist.length > 2 && e.timeStamp - drag.hist[0][0] > 100) drag.hist.shift();
     const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
     if (!drag.axis) {
       if (!drag.onImg || Math.hypot(dx, dy) < 10) return;   // ~10px before committing to a direction
-      drag.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
-      drag.ox = e.clientX - V.x; drag.oy = e.clientY - V.y;  // keep the grab offset: the photo never jumps to the finger
-      drag.s0 = V.s; drag.o0 = Math.max(V.o, 0.2);
-      vs.stop("o", "io"); V.io = 1;
+      if (zoomed()) {
+        drag.axis = "pan";
+        drag.ox = e.clientX - V.px; drag.oy = e.clientY - V.py;
+      } else {
+        drag.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+        drag.ox = e.clientX - V.x; drag.oy = e.clientY - V.y;  // keep the grab offset: the photo never jumps to the finger
+        drag.s0 = V.s; drag.o0 = Math.max(V.o, 0.2);
+        vs.stop("o", "io"); V.io = 1;
+      }
     }
-    if (drag.axis === "x") {
+    if (drag.axis === "pan") {
+      const l = panLimit(V.z);
+      V.px = bandPan(e.clientX - drag.ox, l.x, innerWidth); V.py = bandPan(e.clientY - drag.oy, l.y, innerHeight);
+    } else if (drag.axis === "x") {
       const raw = e.clientX - drag.ox;
       V.x = groupOf(cur).length > 1 ? raw : Math.sign(raw) * rubberband(Math.abs(raw), innerWidth);
     } else {
@@ -957,15 +1084,41 @@
     }
     renderV();
   });
+  const endPinch = () => {
+    const [cx, cy] = pinch.mid; pinch = null;
+    const z2 = clampZ(V.z);
+    if (z2 <= 1.02) return resetZoom();
+    // Settle back inside the limits, keeping the spot between the fingers where it was
+    const p = z2 === V.z ? { px: V.px, py: V.py } : panFor(cx, cy, z2), l = panLimit(z2);
+    if (calm) { Object.assign(V, { z: z2, px: clampPan(p.px, l.x), py: clampPan(p.py, l.y) }); return renderV(); }
+    vs.to("z", z2, { response: 0.3, eps: 0.001 }); vs.to("px", clampPan(p.px, l.x), { response: 0.3 }); vs.to("py", clampPan(p.py, l.y), { response: 0.3 });
+  };
   const endDrag = e => {
+    if (!pointers.has(e.pointerId)) return;
+    pointers.delete(e.pointerId);
+    if (pinch) { if (pointers.size < 2) endPinch(); return; }
     if (!drag || e.pointerId !== drag.id) return;
     const d = drag; drag = null;
     if (!d.axis) {
-      if (!d.onImg && e.type === "pointerup") closeViewer();   // tap the paper around the photo to close
-      else if (d.onImg) settle();
+      if (!d.onImg) { if (e.type === "pointerup") closeViewer(); return; }   // tap the paper around the photo to close
+      // Two taps or clicks on the photo in quick succession zoom in on that spot, or back out
+      const t = e.timeStamp;
+      if (e.type === "pointerup" && lastTap && t - lastTap.t < 320 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30) {
+        lastTap = null; toggleZoom(e.clientX, e.clientY);
+      } else {
+        lastTap = { t, x: e.clientX, y: e.clientY };
+        if (!zoomed()) settle();
+      }
       return;
     }
     const [vx, vy] = releaseVelocity(d.hist, e.timeStamp);
+    if (d.axis === "pan") {
+      // Coast in the direction of the throw, stopping at the photo's edges
+      const l = panLimit(V.z);
+      vs.to("px", clampPan(V.px + project(vx, 0.995), l.x), { velocity: vx, response: 0.45 });
+      vs.to("py", clampPan(V.py + project(vy, 0.995), l.y), { velocity: vy, response: 0.45 });
+      return;
+    }
     if (d.axis === "x") {
       // Decide from where the throw would land and which way it was moving, not where the finger let go
       const end = V.x + project(vx), edge = innerWidth * 0.25;
@@ -993,6 +1146,9 @@
   viewer.addEventListener("keydown", e => {
     if (e.key === "ArrowLeft") go(-1);
     if (e.key === "ArrowRight") go(1);
+    if (e.key === "+" || e.key === "=") { const [cx, cy] = screenMid(); zoomTo(cx, cy, V.z * 1.6); }
+    if (e.key === "-" || e.key === "_") { const [cx, cy] = screenMid(); V.z / 1.6 <= 1.05 ? resetZoom() : zoomTo(cx, cy, V.z / 1.6); }
+    if (e.key === "0") resetZoom();
   });
 
   // The Blender clip loops when on screen; with reduced motion it waits for the play control
