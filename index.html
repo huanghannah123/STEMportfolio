@@ -17,7 +17,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%232c5a6e'/%3E%3Crect x='4' y='4' width='56' height='56' fill='none' stroke='%23cf5a1f' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' text-anchor='middle' fill='%23ebede6'%3EHH%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,700;1,6..72,400&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,700;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
   /* Single light theme on purpose. Layout: a drafting sheet. Section labels sit in a left margin column like drawing callouts,
      the hero carries a title block, and thin dimension lines replace decoration. Square edges only. */
@@ -32,9 +32,18 @@
     --accent: #2c5a6e;    /* ink teal */
     --mark: #cf5a1f;      /* marker orange, used sparingly */
     color-scheme: light;
-    --display: "Newsreader", Georgia, "Times New Roman", serif;
-    --body: "Public Sans", "Helvetica Neue", Arial, sans-serif;
-    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    /* System faces first: they ship optical sizing and tracking tables. Web fonts only where the system has no match. */
+    --display: ui-serif, "Newsreader", Georgia, "Times New Roman", serif;
+    --body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+    /* Tracking is size-specific: tighter as type grows, slightly open when it is small */
+    --track-hero: -0.03em;
+    --track-2xl: -0.022em;
+    --track-xl: -0.015em;
+    --track-lg: -0.01em;
+    --track-md: -0.005em;
+    --track-sm: 0.01em;
+    --material: rgba(235, 237, 230, .72);   /* translucent paper for floating chrome */
     /* Type ramp: one scale, used everywhere */
     --fs-xs: .8125rem;  /* mono labels, captions */
     --fs-sm: .875rem;   /* meta text */
@@ -45,20 +54,25 @@
     --fs-xl: clamp(1.5rem, 3.2vw, 2.25rem);
     --fs-2xl: clamp(2.5rem, 5.5vw, 3.75rem);
     --fs-hero: clamp(3rem, 11vw, 7rem);
-    /* Spacing: 4-point scale (4, 8, 12, 16, 24, 32, 48, 56, 64) */
+    /* Spacing: 4-point scale, written in rem so the layout grows with the reader's text size */
   }
 
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; touch-action: manipulation; scroll-padding-top: 4.5rem; }
+  html.viewing, html.viewing body { overflow: hidden; }
   body {
     margin: 0; background: var(--bg); color: var(--fg);
-    font-family: var(--body); font-size: var(--fs-body); line-height: 1.6;
-    padding-inline: 20px; -webkit-font-smoothing: antialiased;
+    font-family: var(--body); font-size: var(--fs-body); line-height: 1.55; letter-spacing: 0;
+    font-optical-sizing: auto; padding-inline: 1.25rem; -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
-  .wrap { max-width: 1080px; margin: 0 auto; }
+  .wrap { max-width: 67.5rem; margin: 0 auto; }
   a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
   a:hover { text-decoration-thickness: 2px; }
+  /* Feedback on press, not on release */
+  a:active { opacity: .55; }
   a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+  h1, h2, h3, h4, h5 { font-family: var(--display); text-wrap: balance; margin: 0; font-optical-sizing: auto; }
   p { margin: 0; }
   strong, b { font-weight: 700; }
   .points strong, .stage p strong, .lede strong, .spec strong, .steps span strong { color: var(--fg); background: linear-gradient(transparent 62%, rgba(207, 90, 31, .22) 62%); }
@@ -66,39 +80,61 @@
   .label { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 
   /* Nav */
-  nav { border-bottom: 1px solid var(--fg); padding-block: 16px; }
-  nav .wrap { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; }
-  .mark { font-family: var(--display); font-weight: 500; font-size: var(--fs-md); color: var(--fg); text-decoration: none; }
-  .navlinks { display: flex; gap: 8px 24px; flex-wrap: wrap; font-family: var(--mono); font-size: var(--fs-sm); }
-  .navlinks a { color: var(--fg); text-decoration: none; }
-  .navlinks a:hover { text-decoration: underline; }
+  nav {
+    position: sticky; top: 0; z-index: 5; margin-inline: -1.25rem; padding: 0.875rem 1.25rem;
+    background: var(--material);
+    -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+  }
+  nav::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 0.75rem; pointer-events: none;
+    background: linear-gradient(rgba(235, 237, 230, .8), rgba(235, 237, 230, 0));
+    opacity: 0; transition: opacity .2s ease;
+  }
+  nav.edge::after { opacity: 1; }
+  nav .wrap { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem 1.5rem; flex-wrap: wrap; }
+  .mark { font-family: var(--display); font-weight: 600; font-size: var(--fs-md); letter-spacing: var(--track-md); color: var(--fg); text-decoration: none; }
+  /* Text on a translucent layer: a touch heavier and more open so it stays legible over whatever scrolls beneath */
+  .navlinks { display: flex; gap: 0.5rem 1.5rem; flex-wrap: wrap; font-family: var(--mono); font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-sm); }
+  .navlinks a { color: var(--fg); text-decoration: none; text-underline-offset: 6px; text-decoration-thickness: 2px; text-decoration-color: var(--mark); }
+  .navlinks a:hover { text-decoration-line: underline; text-decoration-color: currentColor; text-decoration-thickness: 1px; }
+  /* Where am I: the section on screen is marked in the nav */
+  .navlinks a[aria-current="true"] { text-decoration-line: underline; text-decoration-color: var(--mark); text-decoration-thickness: 2px; }
+  /* Phones: two compact rows; the links sit in one row you can swipe sideways */
+  @media (max-width: 600px) {
+    nav { padding-block: 0.625rem; }
+    nav .wrap { flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 0.25rem; }
+    .navlinks { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 1.25rem; margin-inline: -1.25rem; padding: 0.25rem 1.25rem 0.375rem; overscroll-behavior-x: contain; }
+    .navlinks::-webkit-scrollbar { display: none; }
+    .navlinks a { flex: none; }
+    html { scroll-padding-top: 6rem; }
+  }
 
   /* Hero on grid paper */
   .hero {
-    margin-top: 32px; border: 1px solid var(--fg);
+    margin-top: 2rem; border: 1px solid var(--fg);
     background-color: var(--sheet);
     background-image:
       linear-gradient(var(--grid) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid) 1px, transparent 1px);
     background-size: 24px 24px;
   }
-  .hero-main { padding: clamp(32px, 6vw, 64px) clamp(20px, 5vw, 56px) clamp(32px, 5vw, 48px); display: grid; gap: 24px; }
-  .hero h1 { font-size: var(--fs-hero); font-weight: 400; line-height: 1; letter-spacing: -0.025em; }
+  .hero-main { padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3.5rem) clamp(2rem, 5vw, 3rem); display: grid; gap: 1.5rem; }
+  .hero h1 { font-size: var(--fs-hero); font-weight: 400; line-height: .98; letter-spacing: var(--track-hero); }
   .hero h1 em { font-style: italic; color: var(--accent); }
-  .hero .role { font-family: var(--display); font-size: var(--fs-xl); max-width: 30ch; line-height: 1.4; }
+  .hero .role { font-family: var(--display); font-size: var(--fs-xl); max-width: 30ch; line-height: 1.3; letter-spacing: var(--track-xl); }
 
   /* Rotating inspection stamp in the hero corner */
   .hero { position: relative; overflow: hidden; }
-  .stamp { position: absolute; top: clamp(18px, 4vw, 40px); right: clamp(18px, 4vw, 48px); width: clamp(120px, 16vw, 170px); aspect-ratio: 1; max-width: 100%; color: var(--mark); }
+  .stamp { position: absolute; top: clamp(18px, 4vw, 40px); right: clamp(18px, 4vw, 48px); width: clamp(120px, 16vw, 170px); aspect-ratio: 1; max-width: 100%; color: var(--mark); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; z-index: 1; }
+  .stamp.grabbing { cursor: grabbing; }
   .stamp svg { width: 100%; height: 100%; display: block; overflow: visible; }
-  .stamp .ring { animation: spin 28s linear infinite; transform-origin: 50% 50%; transform-box: fill-box; }
+  .stamp .ring { transform-origin: 50% 50%; transform-box: fill-box; will-change: transform; }
   .stamp text { font-family: var(--mono); font-size: 8.6px; letter-spacing: .16em; fill: currentColor; text-transform: uppercase; }
   .stamp .core { font-family: var(--display); font-size: 30px; letter-spacing: 0; fill: currentColor; text-transform: none; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @media (max-width: 700px) { .stamp { width: 92px; top: 16px; right: 16px; } .hero-main { padding-top: 128px; } }
+  @media (max-width: 700px) { .stamp { width: 92px; top: 16px; right: 16px; } .hero-main { padding-top: 8rem; } }
 
   /* Dimension line: a rule with end ticks and a centred measurement label */
-  .dim { position: relative; display: flex; align-items: center; gap: 12px; color: var(--muted); max-width: 620px; }
+  .dim { position: relative; display: flex; align-items: center; gap: 0.75rem; color: var(--muted); max-width: 38.75rem; }
   .dim::before, .dim::after { content: ""; flex: 1; height: 1px; background: var(--fg); }
   .dim span { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; text-align: center; min-width: 0; }
   .hero-main > * { min-width: 0; }
@@ -107,74 +143,75 @@
 
   /* Title block, like the corner of an engineering drawing */
   .titleblock { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--fg); background: var(--sheet); }
-  .titleblock > div { padding: 16px 16px; border-left: 1px solid var(--fg); display: grid; gap: 4px; min-width: 0; }
+  .titleblock > div { padding: 1rem 1rem; border-left: 1px solid var(--fg); display: grid; gap: 0.25rem; min-width: 0; }
   .titleblock > div:first-child { border-left: 0; }
   .titleblock .value { font-size: var(--fs-base); }
   .titleblock a { color: var(--fg); }
 
   /* Figures strip */
   .figures { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); }
-  .figures > div { padding: 32px 20px 24px 0; display: grid; gap: 8px; align-content: start; }
-  .figures > div + div { padding-left: 20px; border-left: 1px solid var(--line); }
-  .figures .num { font-family: var(--display); font-size: var(--fs-2xl); line-height: 1; color: var(--mark); font-variant-numeric: lining-nums tabular-nums; }
-  .figures p { font-size: var(--fs-base); font-weight: 500; color: var(--muted); max-width: 26ch; }
+  .figures > div { padding: 2rem 1.25rem 1.5rem 0; display: grid; gap: 0.5rem; align-content: start; }
+  .figures > div + div { padding-left: 1.25rem; border-left: 1px solid var(--line); }
+  .figures .num { font-family: var(--display); font-size: var(--fs-2xl); line-height: 1; letter-spacing: var(--track-2xl); color: var(--mark); font-variant-numeric: lining-nums tabular-nums; }
+  .figures p { font-size: var(--fs-base); font-weight: 500; line-height: 1.4; color: var(--muted); max-width: 26ch; }
 
   /* Section rows: label in margin, content right */
-  section { padding-block: 56px; border-bottom: 1px solid var(--line); }
-  .row { display: grid; grid-template-columns: 200px 1fr; gap: 24px 48px; }
-  .row > aside { display: grid; gap: 8px; align-content: start; }
-  .row > aside h2 { font-size: var(--fs-lg); font-weight: 500; line-height: 1.15; }
-  .content { min-width: 0; display: grid; gap: 32px; }
+  section { padding-block: 3.5rem; border-bottom: 1px solid var(--line); }
+  .row { display: grid; grid-template-columns: 12.5rem 1fr; gap: 1.5rem 3rem; }
+  .row > aside { display: grid; gap: 0.5rem; align-content: start; }
+  .row > aside h2 { font-size: var(--fs-lg); font-weight: 600; line-height: 1.15; letter-spacing: var(--track-lg); }
+  .content { min-width: 0; display: grid; gap: 2rem; }
   .lede { color: var(--muted); max-width: 60ch; }
 
   /* Education */
   .school { font-size: var(--fs-xl); font-weight: 400; }
-  .spec { margin: 0; display: grid; grid-template-columns: 130px 1fr; border-top: 1px solid var(--line); }
-  .spec dt, .spec dd { margin: 0; padding-block: 12px; border-bottom: 1px solid var(--line); }
-  .spec dt { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: 16px; }
+  .spec { margin: 0; display: grid; grid-template-columns: 8.125rem 1fr; border-top: 1px solid var(--line); }
+  .spec dt, .spec dd { margin: 0; padding-block: 0.75rem; border-bottom: 1px solid var(--line); }
+  .spec dt { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: 1rem; }
   .spec dd { min-width: 0; }
   .note { display: block; font-size: var(--fs-sm); color: var(--muted); }
 
   /* Featured project */
-  .featured { display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: start; }
-  .featured h3 { font-size: var(--fs-2xl); font-weight: 400; line-height: 1; }
+  .featured { display: grid; grid-template-columns: 1.15fr 1fr; gap: 2.5rem; align-items: start; }
+  .featured h3 { font-size: var(--fs-2xl); font-weight: 400; line-height: 1; letter-spacing: var(--track-2xl); }
   .featured .sub { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); }
-  .featured .intro { display: grid; gap: 16px; min-width: 0; }
-  .featured .intro p.big { font-family: var(--display); font-size: var(--fs-md); line-height: 1.4; font-weight: 700; }
+  .featured .intro { display: grid; gap: 1rem; min-width: 0; }
+  .featured .intro p.big { font-family: var(--display); font-size: var(--fs-md); line-height: 1.3; font-weight: 700; letter-spacing: var(--track-md); }
   .callouts { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--fg); }
-  .callouts li { position: relative; padding: 16px 0 16px 24px; border-bottom: 1px solid var(--line); display: grid; gap: 4px; }
+  .callouts li { position: relative; padding: 1rem 0 1rem 1.5rem; border-bottom: 1px solid var(--line); display: grid; gap: 0.25rem; }
   .callouts li:last-child { border-bottom: 0; }
   .callouts li::before { content: ""; position: absolute; left: 0; top: 24px; width: 14px; height: 2px; background: var(--mark); }
   .callouts .label { font-size: var(--fs-xs); }
   .callouts li > span:last-child { font-weight: 600; }
 
   /* Process steps: a real sequence, so they are numbered */
-  .process { display: grid; gap: 16px; }
+  .process { display: grid; gap: 1rem; }
   .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); counter-reset: step; border-top: 2px solid var(--fg); }
-  .steps li { counter-increment: step; position: relative; padding: 16px 16px 8px 0; display: grid; gap: 4px; align-content: start; min-width: 0; }
-  .steps li + li { padding-left: 16px; border-left: 1px solid var(--line); }
+  .steps li { counter-increment: step; position: relative; padding: 1rem 1rem 0.5rem 0; display: grid; gap: 0.25rem; align-content: start; min-width: 0; }
+  .steps li + li { padding-left: 1rem; border-left: 1px solid var(--line); }
   .steps li::before { content: counter(step, decimal-leading-zero); font-family: var(--mono); font-size: var(--fs-xs); color: var(--mark); }
-  .steps strong { font-family: var(--display); font-size: var(--fs-md); font-weight: 700; line-height: 1.15; }
+  .steps strong { font-family: var(--display); font-size: var(--fs-md); font-weight: 700; line-height: 1.15; letter-spacing: var(--track-md); }
   .steps span { font-size: var(--fs-base); color: var(--muted); }
   .steps .when-s { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; color: var(--muted); }
-  .media { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-  .media figure { margin: 0; display: grid; gap: 8px; border: 1px solid var(--fg); background: var(--sheet); padding: 8px; }
+  .media { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
+  .media figure { margin: 0; display: grid; gap: 0.5rem; border: 1px solid var(--fg); background: var(--sheet); padding: 0.5rem; }
   .media img, .media video { width: 100%; max-width: 100%; height: auto; display: block; }
   .media figcaption { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted); }
-  .tools { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); }
-  .tools b { font-weight: 700; color: var(--mark); letter-spacing: .08em; text-transform: uppercase; margin-right: 8px; }
+  .tools { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); line-height: 1.5; letter-spacing: var(--track-sm); }
+  .tools b { font-weight: 700; color: var(--mark); letter-spacing: .08em; text-transform: uppercase; margin-right: 0.5rem; }
   @media (max-width: 880px) { .steps { grid-template-columns: repeat(2, 1fr); } .steps li:nth-child(3) { padding-left: 0; border-left: 0; } .steps li:nth-child(n+3) { border-top: 1px solid var(--line); } }
   @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } .steps li { padding-left: 0 !important; border-left: 0 !important; } .steps li + li { border-top: 1px solid var(--line); } }
 
   /* Photo galleries */
-  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
-  .gallery figure { margin: 0; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 0.5rem; }
+  .gallery figure { margin: 0; display: grid; gap: 0.5rem; align-content: start; min-width: 0; }
   .gallery a, .gallery .frame { display: block; border: 1px solid var(--fg); background: var(--sheet); aspect-ratio: 4 / 3; overflow: hidden; max-width: 100%; }
   .gallery img, .gallery video { width: 100%; height: 100%; object-fit: cover; display: block; }
   .gallery img.contain { object-fit: contain; background: var(--sheet); }
-  .gallery figcaption { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); line-height: 1.4; }
+  .gallery button.frame { width: 100%; padding: 0; margin: 0; font: inherit; color: inherit; cursor: zoom-in; border-radius: 0; }
+  .gallery figcaption { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); line-height: 1.45; letter-spacing: var(--track-sm); }
   .gallery.two { grid-template-columns: repeat(2, 1fr); }
-  .gallery:has(> figure:only-child) { grid-template-columns: minmax(0, 360px); }
+  .gallery:has(> figure:only-child) { grid-template-columns: minmax(0, 22.5rem); }
   /* The finished build leads the gallery: a tall frame spanning two rows */
   .gallery figure.feature { grid-row: span 2; }
   .gallery figure.feature a, .gallery figure.feature .frame { aspect-ratio: 3 / 4; }
@@ -184,77 +221,88 @@
 
   /* Medi-Pod: lead plate, process record, viewer */
   .shot { display: block; width: 100%; padding: 0; margin: 0; border: 1px solid var(--fg); background: var(--sheet); overflow: hidden; cursor: zoom-in; aspect-ratio: var(--r, 4 / 3); border-radius: 0; }
+  button.shot, .gallery button.frame { transition: transform 160ms ease-out; }
+  button.shot:active, .gallery button.frame:active { transform: scale(.985); transition-duration: 100ms; }
   .shot img, .shot video { width: 100%; height: 100%; object-fit: cover; display: block; }
   div.shot { cursor: default; }
-  .cap { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); line-height: 1.4; }
-  .lead { margin: 0; display: grid; gap: 8px; }
+  .cap { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); line-height: 1.45; letter-spacing: var(--track-sm); }
+  .lead { margin: 0; display: grid; gap: 0.5rem; }
   .record { display: grid; counter-reset: stage; }
-  .record-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; padding-bottom: 12px; border-bottom: 2px solid var(--fg); }
-  .record-head h4 { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; line-height: 1.15; }
-  .stage { counter-increment: stage; display: grid; grid-template-columns: 176px 1fr; gap: 16px 32px; padding-block: 24px; border-bottom: 1px solid var(--line); }
-  .stage-text { display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .record-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--fg); }
+  .record-head h4 { font-family: var(--display); font-size: var(--fs-lg); font-weight: 600; line-height: 1.15; letter-spacing: var(--track-lg); }
+  .stage { counter-increment: stage; display: grid; grid-template-columns: 11rem 1fr; gap: 1rem 2rem; padding-block: 1.5rem; border-bottom: 1px solid var(--line); }
+  .stage-text { display: grid; gap: 0.5rem; align-content: start; min-width: 0; }
   .stage-text::before { content: counter(stage, decimal-leading-zero); font-family: var(--mono); font-size: var(--fs-xs); color: var(--mark); }
-  .stage h5 { margin: 0; font-family: var(--display); font-size: var(--fs-md); font-weight: 700; line-height: 1.15; }
+  .stage h5 { margin: 0; font-family: var(--display); font-size: var(--fs-md); font-weight: 700; line-height: 1.15; letter-spacing: var(--track-md); }
   .stage p { font-size: var(--fs-base); color: var(--muted); }
-  .sketch-rows { display: grid; gap: 24px; }
-  .strip { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
-  .strip figure { margin: 0; flex: var(--r) 1 0%; min-width: 0; display: grid; gap: 8px; }
+  .sketch-rows { display: grid; gap: 1.5rem; }
+  .strip { display: flex; gap: 0.75rem; align-items: flex-start; min-width: 0; }
+  .strip figure { margin: 0; flex: var(--r) 1 0%; min-width: 0; display: grid; gap: 0.5rem; }
   @media (max-width: 600px) {
     .stage { grid-template-columns: 1fr; }
     .strip { display: grid; grid-template-columns: 1fr 1fr; }
     .strip figure.wide { grid-column: 1 / -1; }
     .strip figure.wide .shot { max-height: 70vh; }
   }
-  dialog.viewer { border: 1px solid var(--fg); border-radius: 0; background: var(--sheet); color: var(--fg); padding: 12px; width: min(1200px, 94vw); max-width: 94vw; max-height: 94vh; }
-  dialog.viewer::backdrop { background: rgba(235, 237, 230, .94); }
-  .viewer-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; padding-bottom: 12px; }
-  .viewer-bar div { display: flex; gap: 8px; }
-  .viewer img { display: block; width: 100%; height: auto; max-height: 76vh; object-fit: contain; background: var(--bg); }
-  .viewer .cap { padding-top: 12px; }
-  .viewer[open] img { animation: fadeUp .3s cubic-bezier(.2,.7,.2,1) both; }
+  dialog.viewer { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; color: var(--fg); overflow: hidden; }
+  dialog.viewer::backdrop { background: transparent; }
+  .viewer-scrim { position: absolute; inset: 0; background: var(--bg); opacity: 0; }
+  .viewer-stage { position: absolute; inset: 4.5rem 1rem 5.5rem; display: flex; align-items: center; justify-content: center; touch-action: none; }
+  .viewer-stage img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; border: 1px solid var(--fg); background: var(--sheet); transform-origin: 50% 50%; will-change: transform, opacity; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
+  .viewer-stage img:active { cursor: grabbing; }
+  .viewer-bar {
+    position: absolute; inset: 0 0 auto 0; z-index: 2; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 0.5rem;
+    padding: max(0.75rem, env(safe-area-inset-top)) 1rem 0.75rem;
+    background: var(--material); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+  }
+  .viewer-bar #viewer-close { justify-self: start; }
+  .viewer-bar .label { color: var(--fg); font-weight: 500; }
+  .viewer-nav { justify-self: end; display: flex; gap: 0.5rem; }
+  .viewer-nav button[hidden] { display: none; }
+  .viewer-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; margin: 0 auto; max-width: 70ch; padding: 1rem 1rem max(1rem, env(safe-area-inset-bottom)); text-align: center; }
 
   /* Skip link for keyboard and screen-reader users */
-  .skip { position: absolute; left: 12px; top: -60px; z-index: 20; background: var(--fg); color: var(--bg); padding: 8px 12px; font-family: var(--mono); font-size: var(--fs-sm); }
+  .skip { position: absolute; left: 12px; top: -60px; z-index: 20; background: var(--fg); color: var(--bg); padding: 0.5rem 0.75rem; font-family: var(--mono); font-size: var(--fs-sm); }
   .skip:focus { top: 12px; }
 
   /* Experience log */
   .log { list-style: none; margin: 0; padding: 0; }
-  .entry { display: grid; grid-template-columns: 170px 1fr; gap: 8px 32px; padding-block: 24px; border-top: 1px solid var(--line); }
+  .entry { display: grid; grid-template-columns: 10.625rem 1fr; gap: 0.5rem 2rem; padding-block: 1.5rem; border-top: 1px solid var(--line); }
   .entry:first-child { border-top: 1px solid var(--fg); }
-  .when { display: grid; gap: 4px; align-content: start; font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); padding-top: 8px; font-variant-numeric: tabular-nums; }
+  .when { display: grid; gap: 0.25rem; align-content: start; font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); padding-top: 0.5rem; font-variant-numeric: tabular-nums; }
   .when strong { color: var(--fg); font-weight: 700; }
-  .entry-body { min-width: 0; display: grid; gap: 12px; }
-  .entry h3 { font-size: var(--fs-lg); font-weight: 500; line-height: 1.15; }
+  .entry-body { min-width: 0; display: grid; gap: 0.75rem; }
+  .entry h3 { font-size: var(--fs-lg); font-weight: 600; line-height: 1.15; letter-spacing: var(--track-lg); }
   .entry .prog { font-weight: 700; }
-  .points { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; color: var(--muted); }
+  .points { margin: 0; padding-left: 1.1em; display: grid; gap: 0.5rem; color: var(--muted); }
   .points li::marker { content: "–  "; color: var(--mark); }
 
   /* Activities */
-  .acts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 40px; }
-  .act { padding-block: 20px; border-top: 1px solid var(--line); display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .acts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 2.5rem; }
+  .act { padding-block: 1.25rem; border-top: 1px solid var(--line); display: grid; gap: 0.5rem; align-content: start; min-width: 0; }
   .act h3 { font-size: var(--fs-md); font-weight: 500; }
   .act p { color: var(--muted); font-size: var(--fs-base); }
 
   /* Skills */
-  .skills { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); border-top: 1px solid var(--line); }
-  .skills li { padding: 12px 0; border-bottom: 1px solid var(--line); font-size: var(--fs-base); }
-  .certs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 16px; }
-  .certs li { padding-top: 16px; border-top: 1px solid var(--fg); display: grid; gap: 4px; align-content: start; min-width: 0; }
-  .certs strong { font-family: var(--display); font-size: var(--fs-md); font-weight: 500; line-height: 1.15; }
+  .skills { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(13.75rem, 1fr)); border-top: 1px solid var(--line); }
+  .skills li { padding: 0.75rem 0; border-bottom: 1px solid var(--line); font-size: var(--fs-base); }
+  .certs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  .certs li { padding-top: 1rem; border-top: 1px solid var(--fg); display: grid; gap: 0.25rem; align-content: start; min-width: 0; }
+  .certs strong { font-family: var(--display); font-size: var(--fs-md); font-weight: 600; line-height: 1.2; letter-spacing: var(--track-md); }
   .certs span { color: var(--muted); font-size: var(--fs-base); }
 
   /* Contact */
-  .contact h2.big { font-size: var(--fs-2xl); font-weight: 400; line-height: 1; }
-  .email-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 20px; padding-block: 16px; border-top: 1px solid var(--fg); border-bottom: 1px solid var(--fg); }
-  .email { font-family: var(--display); font-size: var(--fs-xl); user-select: all; word-break: break-all; min-width: 0; }
-  button.copy { font: 500 var(--fs-sm) var(--mono); cursor: pointer; border: 1px solid var(--fg); background: transparent; color: var(--fg); padding: 8px 12px; border-radius: 0; }
-  button.copy:hover { background: var(--fg); color: var(--bg); }
-  footer { padding-block: 24px 48px; color: var(--muted); font-size: var(--fs-xs); font-family: var(--mono); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .contact h2.big { font-size: var(--fs-2xl); font-weight: 400; line-height: 1; letter-spacing: var(--track-2xl); }
+  .email-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.75rem 1.25rem; padding-block: 1rem; border-top: 1px solid var(--fg); border-bottom: 1px solid var(--fg); }
+  .email { font-family: var(--display); font-size: var(--fs-xl); letter-spacing: var(--track-xl); line-height: 1.2; user-select: all; word-break: break-all; min-width: 0; }
+  button.copy { font: 500 var(--fs-sm) var(--mono); letter-spacing: var(--track-sm); cursor: pointer; border: 1px solid var(--fg); background: transparent; color: var(--fg); padding: 0.5rem 0.75rem; border-radius: 0; transition: transform 160ms ease-out; touch-action: manipulation; }
+  button.copy:active { background: var(--fg); color: var(--bg); transform: scale(.97); transition-duration: 100ms; }
+  footer { padding-block: 1.5rem 3rem; color: var(--muted); font-size: var(--fs-xs); font-family: var(--mono); display: flex; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
 
   @media (max-width: 880px) {
     .row { grid-template-columns: 1fr; }
     .featured { grid-template-columns: 1fr; }
-    .certs { grid-template-columns: 1fr; gap: 20px; }
+    .certs { grid-template-columns: 1fr; gap: 1.25rem; }
     .titleblock { grid-template-columns: repeat(2, 1fr); }
     .titleblock > div:nth-child(3) { border-left: 0; }
     .titleblock > div:nth-child(n+3) { border-top: 1px solid var(--fg); }
@@ -264,7 +312,7 @@
   }
   @media (max-width: 600px) {
     .entry { grid-template-columns: 1fr; }
-    .when { padding-top: 0; grid-auto-flow: column; justify-content: start; gap: 12px; }
+    .when { padding-top: 0; grid-auto-flow: column; justify-content: start; gap: 0.75rem; }
     .acts { grid-template-columns: 1fr; }
     .spec { grid-template-columns: 1fr; }
     .spec dt { border-bottom: 0; padding-bottom: 0; }
@@ -273,8 +321,9 @@
     .titleblock > div + div { border-top: 1px solid var(--fg); }
   }
   /* ---------- Motion ---------- */
-  #field { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-  nav, main { position: relative; z-index: 1; }
+  /* Background construction points are drawn once and stay still: no full-screen moving backgrounds */
+  #field { position: fixed; top: 0; left: 0; width: 100%; height: 100lvh; z-index: 0; pointer-events: none; }
+  main { position: relative; z-index: 1; }
   .progress { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; height: 3px; width: 100%; background: var(--mark); transform-origin: 0 50%; transform: scaleX(0); z-index: 10; }
 
   /* Name: letters rise into place once on load */
@@ -295,10 +344,25 @@
   .callouts li::before { transform-origin: 0 50%; }
   .reveal.in .callouts li::before { animation: draw .6s .3s both; }
 
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  /* Reduced motion keeps feedback, as short cross-fades instead of slides and springs */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
+    *, *::before, *::after { animation: none !important; transition-property: opacity, color, background-color !important; transition-duration: .15s !important; }
     .reveal { opacity: 1; transform: none; }
-    #field, .progress { display: none; }
+    .progress { display: none; }
+    button.copy:active, button.shot:active, .gallery button.frame:active { transform: none; }
+  }
+  /* Less transparency: floating chrome turns solid */
+  @media (prefers-reduced-transparency: reduce) {
+    nav, .viewer-bar { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+    nav::after { display: none; }
+    nav.edge { border-bottom: 1px solid var(--line); }
+  }
+  /* More contrast: solid chrome with a defined edge, darker rules */
+  @media (prefers-contrast: more) {
+    :root { --line: #6f766c; --material: var(--bg); }
+    nav, .viewer-bar { -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 1px solid var(--fg); }
+    nav::after { display: none; }
   }
 </style>
 </head>
@@ -313,7 +377,7 @@
     <a class="mark" href="#top">Hannah Huang</a>
     <div class="navlinks">
       <a href="#medi-pod">Medi-Pod</a>
-      <a href="#experience">Experience</a>
+      <a href="#experience">Programs</a>
       <a href="#sketches">Drawing</a>
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
@@ -457,16 +521,17 @@
   </section>
 
   <dialog class="viewer" id="viewer" aria-label="Image viewer">
-    <div class="viewer-bar">
-      <span class="label" id="viewer-count"></span>
-      <div>
+    <div class="viewer-scrim" id="viewer-scrim"></div>
+    <div class="viewer-stage" id="viewer-stage"><img id="viewer-img" alt="" draggable="false"></div>
+    <div class="viewer-bar" id="viewer-bar">
+      <button class="copy" type="button" id="viewer-close">Close</button>
+      <span class="label" id="viewer-count" aria-live="polite"></span>
+      <div class="viewer-nav">
         <button class="copy" type="button" id="viewer-prev">Previous</button>
         <button class="copy" type="button" id="viewer-next">Next</button>
-        <button class="copy" type="button" id="viewer-close">Close</button>
       </div>
     </div>
-    <img id="viewer-img" alt="">
-    <p class="cap" id="viewer-cap"></p>
+    <p class="cap viewer-cap" id="viewer-cap"></p>
   </dialog>
 
   <footer><span>© <span id="year">2026</span> Hannah Huang</span><span>Manhasset, NY</span></footer>
@@ -679,7 +744,8 @@
 
   const rich = s => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   const url = f => /^(data:|embed\/)/.test(f) ? f : MEDIA_BASE + encodeURIComponent(f);
-  const calmGallery = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const calmGallery = calm;
   const figure = m => /\.(mp4|webm|mov)$|^data:video/i.test(m.src)
     ? `<figure><div class="frame"><video src="${url(m.src)}"${m.poster ? ` poster="${url(m.poster)}"` : ""} ${calmGallery ? "controls" : "autoplay loop"} muted playsinline preload="metadata" aria-label="${esc(m.caption)}"></video></div><figcaption>${esc(m.caption)}</figcaption></figure>`
     : /^(data:|embed\/)/.test(m.src)
@@ -702,10 +768,11 @@
 
   // Medi-Pod lead plate, stages, and the image viewer
   const VIEW = [];
+  let GROUP = "medipod";   // Previous / Next stay inside one set of photos
   const shotHTML = (m, cls = "") => {
     const style = `style="--r:${m.r}"`;
     if (/\.mp4$|^data:video/i.test(m.src)) return `<figure class="${cls}" ${style}><div class="shot"><video src="${esc(m.src)}" poster="${esc(m.poster || "")}" muted loop playsinline preload="metadata" aria-label="${esc(m.caption)}"></video></div><figcaption class="cap">${esc(m.caption)}</figcaption></figure>`;
-    const i = VIEW.push(m) - 1;
+    const i = VIEW.push({ ...m, g: GROUP }) - 1;
     return `<figure class="${cls}" ${style}><button class="shot" type="button" data-i="${i}" aria-label="Enlarge: ${esc(m.caption)}"><img src="${esc(m.src)}" alt="${esc(m.caption)}" decoding="async"></button><figcaption class="cap">${esc(m.caption)}</figcaption></figure>`;
   };
   const lead = document.getElementById("medi-lead");
@@ -720,31 +787,244 @@
       })()}</div>
     </div>`).join("");
 
+  GROUP = "drawing";
   document.getElementById("sketch-gallery").innerHTML = SKETCHES.map(row =>
     `<div class="strip">${row.map(m => shotHTML(m, m.r >= 1.2 ? "wide" : "")).join("")}</div>`).join("");
 
-  const viewer = document.getElementById("viewer");
-  const vImg = document.getElementById("viewer-img"), vCap = document.getElementById("viewer-cap"), vCount = document.getElementById("viewer-count");
-  let cur = 0;
-  const show = i => {
-    cur = (i + VIEW.length) % VIEW.length;
-    const m = VIEW[cur];
-    vImg.src = m.src; vImg.alt = m.caption; vCap.textContent = m.caption;
-    vCount.textContent = `${cur + 1} of ${VIEW.length}`;
-  };
-  document.addEventListener("click", e => {
-    const b = e.target.closest("button.shot");
-    if (!b) return;
-    show(+b.dataset.i);
-    if (viewer.showModal) viewer.showModal(); else window.open(VIEW[cur].src, "_blank", "noopener");
+  // Cooper Union photos join the viewer too, so every photo on the page behaves the same way
+  GROUP = "cooper";
+  document.querySelectorAll(".gallery .frame > img").forEach(img => {
+    const i = VIEW.push({ src: img.getAttribute("src"), caption: img.alt, g: GROUP }) - 1;
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "frame"; b.dataset.i = i; b.setAttribute("aria-label", "Enlarge: " + img.alt);
+    img.parentNode.replaceWith(b); b.appendChild(img);
   });
-  document.getElementById("viewer-prev").onclick = () => show(cur - 1);
-  document.getElementById("viewer-next").onclick = () => show(cur + 1);
-  document.getElementById("viewer-close").onclick = () => viewer.close();
-  viewer.addEventListener("click", e => { if (e.target === viewer) viewer.close(); });
+
+  /* ---------- Springs ----------
+     Two designer-facing numbers, as in Apple's motion work: damping ratio (1 = no overshoot, lower = bouncier)
+     and response (seconds, lower = snappier). Every spring starts from the value that is on screen right now
+     and keeps its velocity when its target changes, so any motion can be grabbed and redirected mid-flight. */
+  const project = (v, d = 0.998) => (v / 1000) * d / (1 - d);           // where a flick would coast to
+  const rubberband = (over, dim, c = 0.55) => (over * dim * c) / (dim + c * Math.abs(over));
+  const releaseVelocity = (hist, t) => {                                  // px (or deg) per second over the last ~100ms
+    const b = hist[hist.length - 1], a = hist[0];
+    if (!a || t - b[0] > 60 || b[0] === a[0]) return [0, 0];              // finger paused before lifting: no throw
+    const dt = (b[0] - a[0]) / 1000;
+    return [(b[1] - a[1]) / dt, (b[2] - a[2]) / dt];
+  };
+  function springSystem(state, render) {
+    const run = {}; let raf = 0, last = 0;
+    const tick = now => {
+      const dt = Math.min(0.034, (now - last) / 1000); last = now;
+      let active = false;
+      for (const k in run) {
+        const a = run[k], h = dt / 4;
+        for (let n = 0; n < 4; n++) { const f = -a.k * (state[k] - a.to) - a.c * a.v; a.v += f * h; state[k] += a.v * h; }
+        if (a.near && a.resolve && Math.abs(state[k] - a.to) < a.near) { const r = a.resolve; a.resolve = null; r(true); }
+        if (Math.abs(state[k] - a.to) < a.eps && Math.abs(a.v) < a.eps * 10) {
+          state[k] = a.to; delete run[k]; if (a.resolve) a.resolve(true);
+        } else active = true;
+      }
+      render();
+      raf = active ? requestAnimationFrame(tick) : 0;
+    };
+    return {
+      to(k, to, { damping = 1, response = 0.4, velocity, eps = 0.5, near = 0 } = {}) {
+        const prev = run[k];
+        if (prev && prev.resolve) prev.resolve(false);
+        const a = run[k] = { to, v: velocity ?? (prev ? prev.v : 0), k: (2 * Math.PI / response) ** 2, c: 4 * Math.PI * damping / response, eps, near };
+        if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); }
+        return new Promise(res => { a.resolve = res; });
+      },
+      stop(...keys) { for (const k of keys) if (run[k]) { if (run[k].resolve) run[k].resolve(false); delete run[k]; } },
+      velocity: k => (run[k] ? run[k].v : 0)
+    };
+  }
+
+  /* ---------- Viewer ----------
+     The photo grows out of the thumbnail you pressed and goes back into it. Drag sideways for the next photo,
+     drag down to put it away. Release velocity carries straight into the spring, so there is no seam. */
+  const viewer = document.getElementById("viewer"), stage = document.getElementById("viewer-stage");
+  const vImg = document.getElementById("viewer-img"), vCap = document.getElementById("viewer-cap"), vCount = document.getElementById("viewer-count");
+  const scrim = document.getElementById("viewer-scrim"), chrome = [document.getElementById("viewer-bar"), vCap];
+  const prevBtn = document.getElementById("viewer-prev"), nextBtn = document.getElementById("viewer-next");
+  const V = { x: 0, y: 0, s: 1, o: 0, io: 1 };
+  const clamp01 = n => Math.max(0, Math.min(1, n));
+  const renderV = () => {
+    vImg.style.transform = `translate3d(${V.x}px, ${V.y}px, 0) scale(${V.s})`;
+    vImg.style.opacity = clamp01(V.io);
+    scrim.style.opacity = clamp01(V.o) * 0.97;
+    chrome.forEach(c => { c.style.opacity = clamp01(V.o); });
+  };
+  const vs = springSystem(V, renderV);
+  let cur = -1, gen = 0, hiddenThumb = null;
+  const groupOf = i => VIEW.reduce((list, m, k) => (m.g === VIEW[i].g ? (list.push(k), list) : list), []);
+  const thumbFor = i => document.querySelector(`[data-i="${i}"] img`);
+  const ready = () => (vImg.decode ? vImg.decode().catch(() => {}) : Promise.resolve());
+  const setItem = i => {
+    cur = i;
+    const m = VIEW[i], list = groupOf(i);
+    vImg.src = m.src; vImg.alt = m.caption; vCap.textContent = m.caption;
+    vCount.textContent = list.length > 1 ? `${list.indexOf(i) + 1} of ${list.length}` : "";
+    prevBtn.hidden = nextBtn.hidden = list.length < 2;
+    // The thumbnail steps aside while its photo is enlarged, so the two read as one object
+    if (hiddenThumb) hiddenThumb.style.visibility = "";
+    hiddenThumb = thumbFor(i);
+    if (hiddenThumb) hiddenThumb.style.visibility = "hidden";
+  };
+  // Untransformed image box, worked out from the live (transformed) one
+  const baseRect = () => {
+    const r = vImg.getBoundingClientRect(), w = r.width / V.s, h = r.height / V.s;
+    const cx = r.left + r.width / 2 - V.x, cy = r.top + r.height / 2 - V.y;
+    return { left: cx - w / 2, top: cy - h / 2, width: w, height: h };
+  };
+  // Transform that lays the full photo over a thumbnail (cover-fit, like the thumbnail crop)
+  const overThumb = th => {
+    const t = th.getBoundingClientRect(), b = baseRect();
+    return {
+      x: t.left + t.width / 2 - (b.left + b.width / 2),
+      y: t.top + t.height / 2 - (b.top + b.height / 2),
+      s: Math.max(t.width / b.width, t.height / b.height)
+    };
+  };
+  const onScreen = el => { if (!el) return false; const r = el.getBoundingClientRect(); return r.width > 0 && r.bottom > 0 && r.top < innerHeight; };
+
+  async function openAt(i) {
+    const g = ++gen;
+    setItem(i);
+    if (!viewer.open) { viewer.showModal(); document.documentElement.classList.add("viewing"); }
+    vs.stop("x", "y", "s", "o", "io");
+    Object.assign(V, { x: 0, y: 0, s: 1, o: 0, io: calm ? 0 : 1 }); renderV();
+    await ready(); if (g !== gen) return;
+    const th = thumbFor(i);
+    if (calm || !th) {
+      vs.to("o", 1, { response: 0.25, eps: 0.01 }); vs.to("io", 1, { response: 0.25, eps: 0.01 });
+      return;
+    }
+    Object.assign(V, overThumb(th)); renderV();
+    vs.to("x", 0); vs.to("y", 0); vs.to("s", 1, { eps: 0.001 }); vs.to("o", 1, { response: 0.3, eps: 0.01 });
+  }
+
+  function finishClose() {
+    vs.stop("x", "y", "s", "o", "io");
+    if (hiddenThumb) hiddenThumb.style.visibility = "";
+    hiddenThumb = null;
+    viewer.close(); document.documentElement.classList.remove("viewing");
+    Object.assign(V, { x: 0, y: 0, s: 1, o: 0, io: 1 }); renderV();
+  }
+  async function closeViewer(vel = {}) {
+    if (!viewer.open) return;
+    const g = ++gen, th = thumbFor(cur);
+    let moves;
+    if (!calm && onScreen(th)) {
+      // Leave the way it came in: back into its thumbnail
+      const t = overThumb(th);
+      moves = [vs.to("x", t.x, { velocity: vel.x }), vs.to("y", t.y, { velocity: vel.y }), vs.to("s", t.s, { eps: 0.002 }), vs.to("o", 0, { response: 0.3, eps: 0.01 })];
+    } else {
+      moves = [vs.to("o", 0, { response: 0.25, eps: 0.01 }), vs.to("io", 0, { response: 0.25, eps: 0.01 })];
+      if (!calm) moves.push(vs.to("s", 0.94, { eps: 0.002 }));
+    }
+    await Promise.all(moves);
+    if (g === gen) finishClose();
+  }
+
+  async function go(dir, v = 0) {
+    const list = groupOf(cur);
+    if (list.length < 2) return;
+    const g = ++gen, next = list[(list.indexOf(cur) + dir + list.length) % list.length];
+    if (calm) {
+      await vs.to("io", 0, { response: 0.2, eps: 0.01 }); if (g !== gen) return;
+      setItem(next); Object.assign(V, { x: 0, y: 0, s: 1 }); await ready(); if (g !== gen) return;
+      vs.to("io", 1, { response: 0.2, eps: 0.01 }); vs.to("o", 1, { response: 0.2, eps: 0.01 });
+      return;
+    }
+    vs.to("y", 0); vs.to("s", 1, { eps: 0.001 }); vs.to("o", 1, { response: 0.3, eps: 0.01 });
+    // Current photo leaves on the side you pushed it; the next one arrives from the other side, same direction of travel
+    const off = w => innerWidth / 2 + w / 2 + 16;
+    const left = await vs.to("x", -dir * off(baseRect().width), { velocity: v, response: 0.3, near: 48 });
+    if (!left || g !== gen) return;
+    const carry = vs.velocity("x"); vs.stop("x");
+    setItem(next); await ready(); if (g !== gen) return;
+    V.x = dir * off(baseRect().width); renderV();
+    vs.to("x", 0, { velocity: carry, response: 0.35 });
+  }
+
+  const settle = (vx = 0, vy = 0) => {
+    if (calm) { Object.assign(V, { x: 0, y: 0, s: 1 }); vs.to("o", 1, { response: 0.2, eps: 0.01 }); vs.to("io", 1, { response: 0.2, eps: 0.01 }); return; }
+    // A little bounce only when the gesture itself carried momentum
+    const thrown = Math.hypot(vx, vy) > 200, opts = { damping: thrown ? 0.8 : 1, response: 0.3 };
+    vs.to("x", 0, { ...opts, velocity: vx }); vs.to("y", 0, { ...opts, velocity: vy });
+    vs.to("s", 1, { response: 0.3, eps: 0.001 }); vs.to("o", 1, { response: 0.3, eps: 0.01 }); vs.to("io", 1, { response: 0.2, eps: 0.01 });
+  };
+
+  let drag = null;
+  stage.addEventListener("pointerdown", e => {
+    if (e.button !== 0 || !viewer.open) return;
+    stage.setPointerCapture(e.pointerId);
+    drag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, axis: null, onImg: e.target === vImg, hist: [[e.timeStamp, e.clientX, e.clientY]] };
+    // Grabbing the photo mid-flight stops it exactly where it is on screen
+    if (drag.onImg) { ++gen; vs.stop("x", "y", "s"); }
+  });
+  stage.addEventListener("pointermove", e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    drag.hist.push([e.timeStamp, e.clientX, e.clientY]);
+    while (drag.hist.length > 2 && e.timeStamp - drag.hist[0][0] > 100) drag.hist.shift();
+    const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+    if (!drag.axis) {
+      if (!drag.onImg || Math.hypot(dx, dy) < 10) return;   // ~10px before committing to a direction
+      drag.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      drag.ox = e.clientX - V.x; drag.oy = e.clientY - V.y;  // keep the grab offset: the photo never jumps to the finger
+      drag.s0 = V.s; drag.o0 = Math.max(V.o, 0.2);
+      vs.stop("o", "io"); V.io = 1;
+    }
+    if (drag.axis === "x") {
+      const raw = e.clientX - drag.ox;
+      V.x = groupOf(cur).length > 1 ? raw : Math.sign(raw) * rubberband(Math.abs(raw), innerWidth);
+    } else {
+      const raw = e.clientY - drag.oy;
+      V.y = raw < 0 ? -rubberband(-raw, innerHeight) : raw;
+      // Hint at the outcome while dragging: the photo shrinks and the page shows through as it heads home
+      const p = clamp01(Math.max(0, V.y) / (innerHeight * 0.5));
+      V.s = drag.s0 * (1 - p * 0.25); V.o = drag.o0 * (1 - p * 0.8);
+    }
+    renderV();
+  });
+  const endDrag = e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const d = drag; drag = null;
+    if (!d.axis) {
+      if (!d.onImg && e.type === "pointerup") closeViewer();   // tap the paper around the photo to close
+      else if (d.onImg) settle();
+      return;
+    }
+    const [vx, vy] = releaseVelocity(d.hist, e.timeStamp);
+    if (d.axis === "x") {
+      // Decide from where the throw would land and which way it was moving, not where the finger let go
+      const end = V.x + project(vx), edge = innerWidth * 0.25;
+      const dir = end < -edge && vx <= 0 ? 1 : end > edge && vx >= 0 ? -1 : 0;
+      if (dir && groupOf(cur).length > 1) return go(dir, vx);
+      return settle(vx, 0);
+    }
+    const end = V.y + project(vy);
+    if (end > innerHeight * 0.22 && vy >= 0) return closeViewer({ x: 0, y: vy });
+    settle(0, vy);
+  };
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", endDrag);
+  scrim.addEventListener("click", () => closeViewer());
+
+  document.addEventListener("click", e => {
+    const b = e.target.closest("button[data-i]");
+    if (!b || !viewer.showModal) return;
+    openAt(+b.dataset.i);
+  });
+  prevBtn.addEventListener("click", () => go(-1));
+  nextBtn.addEventListener("click", () => go(1));
+  document.getElementById("viewer-close").addEventListener("click", () => closeViewer());
+  viewer.addEventListener("cancel", e => { e.preventDefault(); closeViewer(); });   // Escape animates out too
   viewer.addEventListener("keydown", e => {
-    if (e.key === "ArrowLeft") show(cur - 1);
-    if (e.key === "ArrowRight") show(cur + 1);
+    if (e.key === "ArrowLeft") go(-1);
+    if (e.key === "ArrowRight") go(1);
   });
 
   // The Blender clip loops when on screen; with reduced motion it waits for the play control
@@ -768,7 +1048,6 @@
     if (navigator.clipboard) navigator.clipboard.writeText(email).then(done, fallback); else fallback();
   });
   /* ---------- Motion ---------- */
-  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // Split the name into letters so each one rises in turn
   if (!calm) {
@@ -805,56 +1084,95 @@
     });
   }
 
-  // Scroll progress hairline
-  const bar = document.getElementById("progress");
+  // Scroll progress hairline, and the nav's scroll edge appears only once content is sliding under it
+  const bar = document.getElementById("progress"), nav = document.querySelector("nav");
+  const navLinks = [...document.querySelectorAll(".navlinks a")];
   const onScroll = () => {
     const max = document.documentElement.scrollHeight - innerHeight;
     bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+    nav.classList.toggle("edge", scrollY > 4);
+    if (scrollY < 120) navLinks.forEach(a => a.removeAttribute("aria-current"));
   };
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
-  // Background: slow drifting construction points joined by faint lines, like a drafting layout
+  // Wayfinding: mark the section that is on screen in the nav
+  if ("IntersectionObserver" in window) {
+    const byId = new Map(navLinks.map(a => [a.getAttribute("href").slice(1), a]));
+    const spy = new IntersectionObserver(entries => entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      const on = byId.get(en.target.id);
+      navLinks.forEach(a => (a === on ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
+      // On phones the link row scrolls sideways; keep the current section's link in view
+      const row = on && on.parentElement;
+      if (row && row.scrollWidth > row.clientWidth) row.scrollTo({ left: on.offsetLeft - row.offsetLeft - 20, behavior: calm ? "auto" : "smooth" });
+    }), { rootMargin: "-40% 0px -55% 0px" });
+    byId.forEach((a, id) => { const sec = document.getElementById(id); if (sec) spy.observe(sec); });
+  }
+
+  // The stamp settles into place once on load. Grab it to spin it: it follows your finger from where you took hold,
+  // and a throw coasts on and settles on the nearest 30 degree mark.
+  (() => {
+    const stamp = document.querySelector(".stamp"), ring = stamp && stamp.querySelector(".ring");
+    if (!ring) return;
+    const R = { a: calm ? 0 : -140 };
+    const draw = () => { ring.style.transform = `rotate(${R.a}deg)`; };
+    const rs = springSystem(R, draw); draw();
+    if (!calm) setTimeout(() => rs.to("a", 0, { response: 0.9, eps: 0.05 }), 300);
+    let d = null;
+    const angle = e => { const r = stamp.getBoundingClientRect(); return Math.atan2(e.clientY - (r.top + r.height / 2), e.clientX - (r.left + r.width / 2)) * 180 / Math.PI; };
+    stamp.addEventListener("pointerdown", e => {
+      if (e.button !== 0) return;
+      stamp.setPointerCapture(e.pointerId); rs.stop("a"); stamp.classList.add("grabbing");
+      d = { id: e.pointerId, last: angle(e), hist: [[e.timeStamp, R.a, 0]] };
+    });
+    stamp.addEventListener("pointermove", e => {
+      if (!d || e.pointerId !== d.id) return;
+      const p = angle(e); let delta = p - d.last; d.last = p;
+      if (delta > 180) delta -= 360; if (delta < -180) delta += 360;   // unwrap across the 180 degree seam
+      R.a += delta; draw();
+      d.hist.push([e.timeStamp, R.a, 0]);
+      while (d.hist.length > 2 && e.timeStamp - d.hist[0][0] > 100) d.hist.shift();
+    });
+    const up = e => {
+      if (!d || e.pointerId !== d.id) return;
+      const [v] = releaseVelocity(d.hist, e.timeStamp); d = null; stamp.classList.remove("grabbing");
+      if (calm) return;
+      const target = Math.round((R.a + project(v)) / 30) * 30;
+      rs.to("a", target, { velocity: v, damping: Math.abs(v) > 90 ? 0.8 : 1, response: 0.4, eps: 0.05 });
+    };
+    stamp.addEventListener("pointerup", up); stamp.addEventListener("pointercancel", up);
+  })();
+
+  // Background: construction points joined by faint lines, like a drafting layout. Drawn once, and it holds still.
   (() => {
     const cv = document.getElementById("field");
-    if (calm || !cv.getContext) return;
+    if (!cv.getContext) return;
     const ctx = cv.getContext("2d");
-    let W, H, dpr, pts = [];
-    const ink = () => getComputedStyle(document.documentElement).getPropertyValue("--drift").trim() || "#59615c";
-    let color = ink();
-    const resize = () => {
-      dpr = Math.min(devicePixelRatio || 1, 2);
-      W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr;
-      const n = Math.round(Math.min(70, (innerWidth * innerHeight) / 22000));
-      pts = Array.from({ length: n }, () => ({
-        x: Math.random() * W, y: Math.random() * H,
-        vx: (Math.random() - .5) * .18 * dpr, vy: (Math.random() - .5) * .18 * dpr
-      }));
-    };
-    resize(); addEventListener("resize", resize);
-    const link = 150;
-    const frame = () => {
-      ctx.clearRect(0, 0, W, H);
-      ctx.strokeStyle = color; ctx.fillStyle = color;
-      const L = link * dpr;
-      for (const p of pts) {
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > W) p.vx *= -1;
-        if (p.y < 0 || p.y > H) p.vy *= -1;
-      }
+    const color = getComputedStyle(document.documentElement).getPropertyValue("--drift").trim() || "#59615c";
+    let lastW = 0;
+    const draw = () => {
+      if (innerWidth === lastW) return;   // phones resize height while scrolling; only redraw for a real width change
+      lastW = innerWidth;
+      let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;   // same layout every visit
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const W = cv.width = cv.clientWidth * dpr, H = cv.height = cv.clientHeight * dpr;
+      const n = Math.round(Math.min(70, (cv.clientWidth * cv.clientHeight) / 22000));
+      const pts = Array.from({ length: n }, () => ({ x: rnd() * W, y: rnd() * H }));
+      const L = 150 * dpr;
+      ctx.clearRect(0, 0, W, H); ctx.strokeStyle = color;
       for (let a = 0; a < pts.length; a++) {
         const p = pts[a];
         for (let b = a + 1; b < pts.length; b++) {
-          const q = pts[b], dx = p.x - q.x, dy = p.y - q.y, d = Math.hypot(dx, dy);
-          if (d < L) { ctx.globalAlpha = (1 - d / L) * 0.22; ctx.lineWidth = dpr * .7; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke(); }
+          const q = pts[b], dd = Math.hypot(p.x - q.x, p.y - q.y);
+          if (dd < L) { ctx.globalAlpha = (1 - dd / L) * 0.22; ctx.lineWidth = dpr * .7; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke(); }
         }
-        // small cross marks instead of dots, like construction points on a drawing
-        ctx.globalAlpha = 0.35; ctx.lineWidth = dpr * .8; const s = 3 * dpr;
-        ctx.beginPath(); ctx.moveTo(p.x - s, p.y); ctx.lineTo(p.x + s, p.y); ctx.moveTo(p.x, p.y - s); ctx.lineTo(p.x, p.y + s); ctx.stroke();
+        ctx.globalAlpha = 0.35; ctx.lineWidth = dpr * .8; const sz = 3 * dpr;
+        ctx.beginPath(); ctx.moveTo(p.x - sz, p.y); ctx.lineTo(p.x + sz, p.y); ctx.moveTo(p.x, p.y - sz); ctx.lineTo(p.x, p.y + sz); ctx.stroke();
       }
       ctx.globalAlpha = 1;
-      if (!document.hidden) requestAnimationFrame(frame); else setTimeout(() => requestAnimationFrame(frame), 500);
     };
-    requestAnimationFrame(frame);
+    draw();
+    let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(draw, 150); });
   })();
 </script>
 </body>
