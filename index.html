@@ -17,7 +17,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%232c5a6e'/%3E%3Crect x='4' y='4' width='56' height='56' fill='none' stroke='%23cf5a1f' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' text-anchor='middle' fill='%23ebede6'%3EHH%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,700;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,700;1,6..72,400&display=swap">
 <style>
   /* Single light theme on purpose. Layout: a drafting sheet. Section labels sit in a left margin column like drawing callouts,
      the hero carries a title block, and thin dimension lines replace decoration. Square edges only. */
@@ -35,7 +35,6 @@
     /* System faces first: they ship optical sizing and tracking tables. Web fonts only where the system has no match. */
     --display: ui-serif, "Newsreader", Georgia, "Times New Roman", serif;
     --body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --mono: ui-monospace, "SF Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
     /* Tracking is size-specific: tighter as type grows, slightly open when it is small */
     --track-hero: -0.03em;
     --track-2xl: -0.022em;
@@ -45,7 +44,7 @@
     --track-sm: 0.01em;
     --material: rgba(235, 237, 230, .72);   /* translucent paper for floating chrome */
     /* Type ramp: one scale, used everywhere */
-    --fs-xs: .8125rem;  /* mono labels, captions */
+    --fs-xs: .8125rem;  /* small labels */
     --fs-sm: .875rem;   /* meta text */
     --fs-base: 1rem;    /* secondary body */
     --fs-body: 1.0625rem;
@@ -76,8 +75,7 @@
   p { margin: 0; }
   strong, b { font-weight: 700; }
   .points strong, .stage p strong, .lede strong, .spec strong, .steps span strong { color: var(--fg); background: linear-gradient(transparent 62%, rgba(207, 90, 31, .22) 62%); }
-  .mono { font-family: var(--mono); }
-  .label { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .label { font-size: var(--fs-sm); font-weight: 400; letter-spacing: var(--track-sm); color: var(--muted); }
 
   /* Nav */
   nav {
@@ -94,7 +92,7 @@
   nav .wrap { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem 1.5rem; flex-wrap: wrap; }
   .mark { font-family: var(--display); font-weight: 600; font-size: var(--fs-md); letter-spacing: var(--track-md); color: var(--fg); text-decoration: none; }
   /* Text on a translucent layer: a touch heavier and more open so it stays legible over whatever scrolls beneath */
-  .navlinks { display: flex; gap: 0.5rem 1.5rem; flex-wrap: wrap; font-family: var(--mono); font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-sm); }
+  .navlinks { display: flex; gap: 0.5rem 1.5rem; flex-wrap: wrap; font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-sm); }
   .navlinks a { color: var(--fg); text-decoration: none; text-underline-offset: 6px; text-decoration-thickness: 2px; text-decoration-color: var(--mark); }
   .navlinks a:hover { text-decoration-line: underline; text-decoration-color: currentColor; text-decoration-thickness: 1px; }
   /* Where am I: the section on screen is marked in the nav */
@@ -120,7 +118,6 @@
   }
   .hero-main { padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3.5rem) clamp(2rem, 5vw, 3rem); display: grid; gap: 1.5rem; }
   .hero h1 { font-size: var(--fs-hero); font-weight: 400; line-height: .98; letter-spacing: var(--track-hero); }
-  .hero h1 em { font-style: italic; color: var(--accent); }
   .hero .role { font-family: var(--display); font-size: var(--fs-xl); max-width: 30ch; line-height: 1.3; letter-spacing: var(--track-xl); }
 
   /* Rotating inspection stamp in the hero corner */
@@ -129,14 +126,14 @@
   .stamp.grabbing { cursor: grabbing; }
   .stamp svg { width: 100%; height: 100%; display: block; overflow: visible; }
   .stamp .ring { transform-origin: 50% 50%; transform-box: fill-box; will-change: transform; }
-  .stamp text { font-family: var(--mono); font-size: 8.6px; letter-spacing: .16em; fill: currentColor; text-transform: uppercase; }
+  .stamp text { font-family: var(--body); font-size: 8.4px; font-weight: 600; letter-spacing: .14em; fill: currentColor; text-transform: uppercase; }
   .stamp .core { font-family: var(--display); font-size: 30px; letter-spacing: 0; fill: currentColor; text-transform: none; }
   @media (max-width: 700px) { .stamp { width: 92px; top: 16px; right: 16px; } .hero-main { padding-top: 8rem; } }
 
   /* Dimension line: a rule with end ticks and a centred measurement label */
   .dim { position: relative; display: flex; align-items: center; gap: 0.75rem; color: var(--muted); max-width: 38.75rem; }
   .dim::before, .dim::after { content: ""; flex: 1; height: 1px; background: var(--fg); }
-  .dim span { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; text-align: center; min-width: 0; }
+  .dim span { font-size: var(--fs-sm); letter-spacing: var(--track-sm); text-align: center; min-width: 0; }
   .hero-main > * { min-width: 0; }
   .dim i { position: absolute; top: 50%; width: 2px; height: 14px; background: var(--mark); transform: translateY(-50%); }
   .dim i:first-child { left: 0; } .dim i:last-child { right: 0; }
@@ -147,13 +144,6 @@
   .titleblock > div:first-child { border-left: 0; }
   .titleblock .value { font-size: var(--fs-base); }
   .titleblock a { color: var(--fg); }
-
-  /* Figures strip */
-  .figures { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); }
-  .figures > div { padding: 2rem 1.25rem 1.5rem 0; display: grid; gap: 0.5rem; align-content: start; }
-  .figures > div + div { padding-left: 1.25rem; border-left: 1px solid var(--line); }
-  .figures .num { font-family: var(--display); font-size: var(--fs-2xl); line-height: 1; letter-spacing: var(--track-2xl); color: var(--mark); font-variant-numeric: lining-nums tabular-nums; }
-  .figures p { font-size: var(--fs-base); font-weight: 500; line-height: 1.4; color: var(--muted); max-width: 26ch; }
 
   /* Section rows: label in margin, content right */
   section { padding-block: 3.5rem; border-bottom: 1px solid var(--line); }
@@ -167,21 +157,21 @@
   .school { font-size: var(--fs-xl); font-weight: 400; }
   .spec { margin: 0; display: grid; grid-template-columns: 8.125rem 1fr; border-top: 1px solid var(--line); }
   .spec dt, .spec dd { margin: 0; padding-block: 0.75rem; border-bottom: 1px solid var(--line); }
-  .spec dt { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: 1rem; }
+  .spec dt { font-size: var(--fs-sm); font-weight: 600; color: var(--muted); padding-top: 0.875rem; }
   .spec dd { min-width: 0; }
   .note { display: block; font-size: var(--fs-sm); color: var(--muted); }
 
   /* Featured project */
   .featured { display: grid; grid-template-columns: 1.15fr 1fr; gap: 2.5rem; align-items: start; }
   .featured h3 { font-size: var(--fs-2xl); font-weight: 400; line-height: 1; letter-spacing: var(--track-2xl); }
-  .featured .sub { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); }
+  .featured .sub { font-size: var(--fs-base); color: var(--muted); }
   .featured .intro { display: grid; gap: 1rem; min-width: 0; }
   .featured .intro p.big { font-family: var(--display); font-size: var(--fs-md); line-height: 1.3; font-weight: 700; letter-spacing: var(--track-md); }
   .callouts { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--fg); }
   .callouts li { position: relative; padding: 1rem 0 1rem 1.5rem; border-bottom: 1px solid var(--line); display: grid; gap: 0.25rem; }
   .callouts li:last-child { border-bottom: 0; }
   .callouts li::before { content: ""; position: absolute; left: 0; top: 24px; width: 14px; height: 2px; background: var(--mark); }
-  .callouts .label { font-size: var(--fs-xs); }
+  .callouts .label { font-size: var(--fs-sm); }
   .callouts li > span:last-child { font-weight: 600; }
 
   /* Process steps: a real sequence, so they are numbered */
@@ -189,16 +179,16 @@
   .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); counter-reset: step; border-top: 2px solid var(--fg); }
   .steps li { counter-increment: step; position: relative; padding: 1rem 1rem 0.5rem 0; display: grid; gap: 0.25rem; align-content: start; min-width: 0; }
   .steps li + li { padding-left: 1rem; border-left: 1px solid var(--line); }
-  .steps li::before { content: counter(step, decimal-leading-zero); font-family: var(--mono); font-size: var(--fs-xs); color: var(--mark); }
+  .steps li::before { content: counter(step); font-family: var(--display); font-size: var(--fs-lg); line-height: 1; color: var(--mark); font-variant-numeric: lining-nums; }
   .steps strong { font-family: var(--display); font-size: var(--fs-md); font-weight: 700; line-height: 1.15; letter-spacing: var(--track-md); }
   .steps span { font-size: var(--fs-base); color: var(--muted); }
-  .steps .when-s { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: .08em; color: var(--muted); }
+  .steps .when-s { font-size: var(--fs-sm); color: var(--muted); }
   .media { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
   .media figure { margin: 0; display: grid; gap: 0.5rem; border: 1px solid var(--fg); background: var(--sheet); padding: 0.5rem; }
   .media img, .media video { width: 100%; max-width: 100%; height: auto; display: block; }
-  .media figcaption { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted); }
-  .tools { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); line-height: 1.5; letter-spacing: var(--track-sm); }
-  .tools b { font-weight: 700; color: var(--mark); letter-spacing: .08em; text-transform: uppercase; margin-right: 0.5rem; }
+  .media figcaption { font-size: var(--fs-sm); color: var(--muted); }
+  .tools { font-size: var(--fs-sm); color: var(--muted); line-height: 1.5; max-width: 68ch; }
+  .tools b { font-weight: 700; color: var(--fg); margin-right: 0.375rem; }
   @media (max-width: 880px) { .steps { grid-template-columns: repeat(2, 1fr); } .steps li:nth-child(3) { padding-left: 0; border-left: 0; } .steps li:nth-child(n+3) { border-top: 1px solid var(--line); } }
   @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } .steps li { padding-left: 0 !important; border-left: 0 !important; } .steps li + li { border-top: 1px solid var(--line); } }
 
@@ -209,7 +199,7 @@
   .gallery img, .gallery video { width: 100%; height: 100%; object-fit: cover; display: block; }
   .gallery img.contain { object-fit: contain; background: var(--sheet); }
   .gallery button.frame { width: 100%; padding: 0; margin: 0; font: inherit; color: inherit; cursor: zoom-in; border-radius: 0; }
-  .gallery figcaption { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); line-height: 1.45; letter-spacing: var(--track-sm); }
+  .gallery figcaption { font-size: var(--fs-sm); color: var(--muted); line-height: 1.45; }
   .gallery.two { grid-template-columns: repeat(2, 1fr); }
   .gallery:has(> figure:only-child) { grid-template-columns: minmax(0, 22.5rem); }
   /* The finished build leads the gallery: a tall frame spanning two rows */
@@ -225,14 +215,14 @@
   button.shot:active, .gallery button.frame:active { transform: scale(.985); transition-duration: 100ms; }
   .shot img, .shot video { width: 100%; height: 100%; object-fit: cover; display: block; }
   div.shot { cursor: default; }
-  .cap { font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); line-height: 1.45; letter-spacing: var(--track-sm); }
+  .cap { font-size: var(--fs-sm); color: var(--muted); line-height: 1.45; }
   .lead { margin: 0; display: grid; gap: 0.5rem; }
   .record { display: grid; counter-reset: stage; }
   .record-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--fg); }
-  .record-head h4 { font-family: var(--display); font-size: var(--fs-lg); font-weight: 600; line-height: 1.15; letter-spacing: var(--track-lg); }
+  .sub-head, .record-head h4 { font-family: var(--display); font-size: var(--fs-lg); font-weight: 600; line-height: 1.15; letter-spacing: var(--track-lg); }
   .stage { counter-increment: stage; display: grid; grid-template-columns: 11rem 1fr; gap: 1rem 2rem; padding-block: 1.5rem; border-bottom: 1px solid var(--line); }
   .stage-text { display: grid; gap: 0.5rem; align-content: start; min-width: 0; }
-  .stage-text::before { content: counter(stage, decimal-leading-zero); font-family: var(--mono); font-size: var(--fs-xs); color: var(--mark); }
+  .stage-text::before { content: counter(stage); font-family: var(--display); font-size: var(--fs-lg); line-height: 1; color: var(--mark); font-variant-numeric: lining-nums; }
   .stage h5 { margin: 0; font-family: var(--display); font-size: var(--fs-md); font-weight: 700; line-height: 1.15; letter-spacing: var(--track-md); }
   .stage p { font-size: var(--fs-base); color: var(--muted); }
   .sketch-rows { display: grid; gap: 1.5rem; }
@@ -256,25 +246,25 @@
     background: var(--material); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
   }
   .viewer-bar #viewer-close { justify-self: start; }
-  .viewer-bar .label { color: var(--fg); font-weight: 500; }
+  .viewer-bar .count { font-size: var(--fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
   .viewer-nav { justify-self: end; display: flex; gap: 0.5rem; }
   .viewer-nav button[hidden] { display: none; }
   .viewer-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; margin: 0 auto; max-width: 70ch; padding: 1rem 1rem max(1rem, env(safe-area-inset-bottom)); text-align: center; }
 
   /* Skip link for keyboard and screen-reader users */
-  .skip { position: absolute; left: 12px; top: -60px; z-index: 20; background: var(--fg); color: var(--bg); padding: 0.5rem 0.75rem; font-family: var(--mono); font-size: var(--fs-sm); }
+  .skip { position: absolute; left: 12px; top: -60px; z-index: 20; background: var(--fg); color: var(--bg); padding: 0.5rem 0.75rem; font-size: var(--fs-sm); }
   .skip:focus { top: 12px; }
 
   /* Experience log */
   .log { list-style: none; margin: 0; padding: 0; }
   .entry { display: grid; grid-template-columns: 10.625rem 1fr; gap: 0.5rem 2rem; padding-block: 1.5rem; border-top: 1px solid var(--line); }
   .entry:first-child { border-top: 1px solid var(--fg); }
-  .when { display: grid; gap: 0.25rem; align-content: start; font-family: var(--mono); font-size: var(--fs-sm); color: var(--muted); padding-top: 0.5rem; font-variant-numeric: tabular-nums; }
+  .when { display: grid; gap: 0.25rem; align-content: start; font-size: var(--fs-sm); color: var(--muted); padding-top: 0.375rem; font-variant-numeric: tabular-nums; }
   .when strong { color: var(--fg); font-weight: 700; }
   .entry-body { min-width: 0; display: grid; gap: 0.75rem; }
   .entry h3 { font-size: var(--fs-lg); font-weight: 600; line-height: 1.15; letter-spacing: var(--track-lg); }
   .entry .prog { font-weight: 700; }
-  .points { margin: 0; padding-left: 1.1em; display: grid; gap: 0.5rem; color: var(--muted); }
+  .points { margin: 0; padding-left: 1.1em; display: grid; gap: 0.5rem; color: var(--muted); max-width: 68ch; }
   .points li::marker { content: "–  "; color: var(--mark); }
 
   /* Activities */
@@ -295,9 +285,9 @@
   .contact h2.big { font-size: var(--fs-2xl); font-weight: 400; line-height: 1; letter-spacing: var(--track-2xl); }
   .email-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.75rem 1.25rem; padding-block: 1rem; border-top: 1px solid var(--fg); border-bottom: 1px solid var(--fg); }
   .email { font-family: var(--display); font-size: var(--fs-xl); letter-spacing: var(--track-xl); line-height: 1.2; user-select: all; word-break: break-all; min-width: 0; }
-  button.copy { font: 500 var(--fs-sm) var(--mono); letter-spacing: var(--track-sm); cursor: pointer; border: 1px solid var(--fg); background: transparent; color: var(--fg); padding: 0.5rem 0.75rem; border-radius: 0; transition: transform 160ms ease-out; touch-action: manipulation; }
+  button.copy { font: 500 var(--fs-sm) var(--body); cursor: pointer; border: 1px solid var(--fg); background: transparent; color: var(--fg); padding: 0.5rem 0.75rem; border-radius: 0; transition: transform 160ms ease-out; touch-action: manipulation; }
   button.copy:active { background: var(--fg); color: var(--bg); transform: scale(.97); transition-duration: 100ms; }
-  footer { padding-block: 1.5rem 3rem; color: var(--muted); font-size: var(--fs-xs); font-family: var(--mono); display: flex; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+  footer { padding-block: 1.5rem 3rem; color: var(--muted); font-size: var(--fs-sm); display: flex; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
 
   @media (max-width: 880px) {
     .row { grid-template-columns: 1fr; }
@@ -306,9 +296,6 @@
     .titleblock { grid-template-columns: repeat(2, 1fr); }
     .titleblock > div:nth-child(3) { border-left: 0; }
     .titleblock > div:nth-child(n+3) { border-top: 1px solid var(--fg); }
-    .figures { grid-template-columns: repeat(2, 1fr); }
-    .figures > div:nth-child(3) { padding-left: 0; border-left: 0; }
-    .figures > div:nth-child(n+3) { border-top: 1px solid var(--line); }
   }
   @media (max-width: 600px) {
     .entry { grid-template-columns: 1fr; }
@@ -324,7 +311,6 @@
   /* Background construction points are drawn once and stay still: no full-screen moving backgrounds */
   #field { position: fixed; top: 0; left: 0; width: 100%; height: 100lvh; z-index: 0; pointer-events: none; }
   main { position: relative; z-index: 1; }
-  .progress { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; height: 3px; width: 100%; background: var(--mark); transform-origin: 0 50%; transform: scaleX(0); z-index: 10; }
 
   /* Name: letters rise into place once on load */
   .hero h1 .ch { display: inline-block; animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
@@ -338,18 +324,10 @@
   .dim i { animation: fadeUp .4s 1.6s both; }
   @keyframes draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-  /* Scroll reveal: only applied by script to content below the first screen */
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
-  .reveal.in { opacity: 1; transform: none; }
-  .callouts li::before { transform-origin: 0 50%; }
-  .reveal.in .callouts li::before { animation: draw .6s .3s both; }
-
   @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
   /* Reduced motion keeps feedback, as short cross-fades instead of slides and springs */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition-property: opacity, color, background-color !important; transition-duration: .15s !important; }
-    .reveal { opacity: 1; transform: none; }
-    .progress { display: none; }
     button.copy:active, button.shot:active, .gallery button.frame:active { transform: none; }
   }
   /* Less transparency: floating chrome turns solid */
@@ -370,7 +348,6 @@
 
 <a class="skip" href="#top">Skip to content</a>
 <canvas id="field" aria-hidden="true"></canvas>
-<div class="progress" id="progress" aria-hidden="true"></div>
 
 <nav aria-label="Sections">
   <div class="wrap">
@@ -393,39 +370,31 @@
           <defs><path id="circ" d="M80,80 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0"/></defs>
           <circle cx="80" cy="80" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/>
           <circle cx="80" cy="80" r="48" fill="none" stroke="currentColor" stroke-width="1"/>
-          <text><textPath href="#circ">CAD Modeling · Prototyping · Human-Centered Design · </textPath></text>
+          <text><textPath href="#circ">CAD Modeling / Prototyping / Human-Centered Design / </textPath></text>
         </g>
         <text class="core" x="80" y="91" text-anchor="middle">HH</text>
       </svg>
     </div>
     <div class="hero-main">
-      <p class="label">Industrial Engineering &amp; Product Design</p>
-      <h1 id="name"><span class="w">Hannah</span><br><em class="w">Huang</em></h1>
-      <div class="dim"><i></i><span>CAD Modeling · Prototyping · Human-Centered Design</span><i></i></div>
+      <h1 id="name"><span class="w">Hannah</span><br><span class="w">Huang</span></h1>
+      <div class="dim"><i></i><span>CAD modeling, prototyping, and human-centered design</span><i></i></div>
     </div>
     <div class="titleblock">
-      <div><span class="label">Focus</span><span class="value">Industrial Engineering</span></div>
-      <div><span class="label">Also</span><span class="value">Human-Centered Design</span></div>
+      <div><span class="label">Focus</span><span class="value">Industrial engineering</span></div>
+      <div><span class="label">Also</span><span class="value">Human-centered design</span></div>
       <div><span class="label">Based in</span><span class="value">Manhasset, NY</span></div>
-      <div><span class="label">Links</span><span class="value"><a href="https://www.linkedin.com/in/hannah-h-a89bb93b3" target="_blank" rel="noopener">LinkedIn</a> · <a href="#contact">Email</a></span></div>
+      <div><span class="label">Links</span><span class="value"><a href="https://www.linkedin.com/in/hannah-h-a89bb93b3" target="_blank" rel="noopener">LinkedIn</a>&ensp;<a href="#contact">Email</a></span></div>
     </div>
   </header>
 
-  <div class="figures" aria-label="Highlights">
-    <div><span class="num">55</span><p>elders and caregivers interviewed to validate Medi-Pod</p></div>
-    <div><span class="num">120</span><p>applicants for the Georgia Tech Pre-College Program</p></div>
-    <div><span class="num">150+</span><p>girls mentored worldwide through Girls Who Code</p></div>
-    <div><span class="num">4</span><p>person team co-led to build the gyroscope-stabilized cup holder</p></div>
-  </div>
-
   <section id="medi-pod">
     <div class="row">
-      <aside><span class="label">Featured project</span></aside>
+      <aside><h2>Featured project</h2></aside>
       <div class="content">
         <div class="featured">
           <div class="intro">
             <h3>Medi-Pod</h3>
-            <p class="sub">Self-Led Pilot Project · Queens, NY · Sep to Oct 2026</p>
+            <p class="sub">Self-led pilot project in Queens, NY, from September to October 2026</p>
             <p class="big">A 4-in-1 medicine dispenser for elderly users with memory loss.</p>
             <p class="lede">An independent continuation of my <strong>Georgia Tech prototype</strong> with <strong>Allen Senior Home</strong>, revised around what users most reliably forget.</p>
             <dl class="spec">
@@ -445,19 +414,19 @@
         <figure class="lead" id="medi-lead"></figure>
 
         <div class="process">
-          <p class="label">How it developed</p>
+          <h4 class="sub-head">How it developed</h4>
           <ol class="steps">
-            <li><span class="when-s">Summer 2026 · Georgia Tech</span><strong>Listen</strong><span>Ran direct <strong>user-research interviews</strong> with older adults and caregivers.</span></li>
+            <li><span class="when-s">Summer 2026, Georgia Tech</span><strong>Listen</strong><span>Ran direct <strong>user-research interviews</strong> with older adults and caregivers.</span></li>
             <li><span class="when-s">Two-week sprint</span><strong>Model</strong><span>Turned their feedback into a <strong>fully 3D-modeled and animated CAD design</strong>.</span></li>
-            <li><span class="when-s">Summer 2026 · Georgia Tech</span><strong>Demo</strong><span>Presented a <strong>live demo</strong> of the working prototype to Georgia Tech faculty and peers.</span></li>
-            <li><span class="when-s">Sep to Oct 2026 · Allen Senior Home</span><strong>Revise</strong><span>Ran interviews and feedback sessions with 55 elders and caregivers, then <strong>revised the design in CAD</strong> with DFM principles.</span></li>
+            <li><span class="when-s">Summer 2026, Georgia Tech</span><strong>Demo</strong><span>Presented a <strong>live demo</strong> of the working prototype to Georgia Tech faculty and peers.</span></li>
+            <li><span class="when-s">Sep to Oct 2026, Allen Senior Home</span><strong>Revise</strong><span>Ran interviews and feedback sessions with 55 elders and caregivers, then <strong>revised the design in CAD</strong> with DFM principles.</span></li>
           </ol>
         </div>
 
         <div class="record" id="process">
           <div class="record-head">
             <h4>Process record</h4>
-            <p class="cap">Georgia Tech Pre-College Program, Summer 2026. Select an image to enlarge it.</p>
+            <p class="cap">Georgia Tech Pre-College Program, summer 2026. Select a photo to see it full size.</p>
           </div>
           <div id="stages"></div>
         </div>
@@ -467,7 +436,7 @@
 
   <section id="experience">
     <div class="row">
-      <aside><span class="label">Experience</span><h2>Programs</h2></aside>
+      <aside><h2>Programs</h2></aside>
       <div class="content">
         <ol class="log" id="experience-list"></ol>
       </div>
@@ -476,7 +445,7 @@
 
   <section id="sketches">
     <div class="row">
-      <aside><span class="label">Sketchbook</span><h2>Drawing Skills</h2></aside>
+      <aside><h2>Drawing skills</h2></aside>
       <div class="content">
         <p class="lede">Product sketches, charcoal still lifes, and figure studies, built on <strong>perspective</strong>, <strong>construction lines</strong>, and <strong>shading</strong>.</p>
         <div class="sketch-rows" id="sketch-gallery"></div>
@@ -486,7 +455,7 @@
 
   <section id="skills">
     <div class="row">
-      <aside><span class="label">Skills</span><h2>Skills and certifications</h2></aside>
+      <aside><h2>Skills and certifications</h2></aside>
       <div class="content">
         <ul class="skills">
           <li>CAD (Certified)</li>
@@ -500,7 +469,7 @@
           <li>UI/UX Wireframing</li>
         </ul>
         <ul class="certs">
-          <li><span class="label">Feb 2025</span><strong>SketchUp Project Certificate (Engineering Design)</strong><span>Coursera</span></li>
+          <li><strong>SketchUp Project Certificate (Engineering Design)</strong><span>Coursera, February 2025</span></li>
         </ul>
       </div>
     </div>
@@ -508,9 +477,8 @@
 
   <section id="contact" class="contact">
     <div class="row">
-      <aside><span class="label">Contact</span></aside>
+      <aside><h2>Contact</h2></aside>
       <div class="content">
-        <h2 class="big">Get in touch</h2>
         <div class="email-line">
           <span class="email" id="email">hannahhuang0407@gmail.com</span>
           <button class="copy" id="copy-btn" type="button">Copy email</button>
@@ -525,7 +493,7 @@
     <div class="viewer-stage" id="viewer-stage"><img id="viewer-img" alt="" draggable="false"></div>
     <div class="viewer-bar" id="viewer-bar">
       <button class="copy" type="button" id="viewer-close">Close</button>
-      <span class="label" id="viewer-count" aria-live="polite"></span>
+      <span class="count" id="viewer-count" aria-live="polite"></span>
       <div class="viewer-nav">
         <button class="copy" type="button" id="viewer-prev">Previous</button>
         <button class="copy" type="button" id="viewer-next">Next</button>
@@ -1059,37 +1027,10 @@
     hm.forEach((el, k) => { el.classList.add("fade-in"); el.style.animationDelay = (0.5 + k * 0.08) + "s"; });
   }
 
-  // Reveal sections and count up figures as they scroll into view
-  const countUp = el => {
-    const raw = el.textContent, target = parseInt(raw, 10), suffix = raw.replace(/\d+/, "");
-    const t0 = performance.now(), dur = 1200;
-    const step = now => {
-      const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * e) + suffix;
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  };
-  if (!calm && "IntersectionObserver" in window) {
-    const targets = document.querySelectorAll("section .content > *, section aside, .figures > div, .entry, .act, .certs li");
-    const io = new IntersectionObserver(entries => entries.forEach(en => {
-      if (!en.isIntersecting) return;
-      en.target.classList.add("in");
-      en.target.querySelectorAll(".num").forEach(countUp);
-      io.unobserve(en.target);
-    }), { threshold: 0, rootMargin: "0px 0px -12% 0px" }); // threshold 0 so very tall blocks (the process record) still reveal on phones
-    targets.forEach(el => {
-      if (el.getBoundingClientRect().top > innerHeight * 0.92) { el.classList.add("reveal"); io.observe(el); }
-      else if (el.querySelector(".num")) setTimeout(() => countUp(el.querySelector(".num")), 900);
-    });
-  }
-
-  // Scroll progress hairline, and the nav's scroll edge appears only once content is sliding under it
-  const bar = document.getElementById("progress"), nav = document.querySelector("nav");
+  // The nav's scroll edge appears only once content is sliding under it
+  const nav = document.querySelector("nav");
   const navLinks = [...document.querySelectorAll(".navlinks a")];
   const onScroll = () => {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
     nav.classList.toggle("edge", scrollY > 4);
     if (scrollY < 120) navLinks.forEach(a => a.removeAttribute("aria-current"));
   };
