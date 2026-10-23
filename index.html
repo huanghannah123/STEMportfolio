@@ -13,11 +13,11 @@
 <meta property="og:image" content="https://huanghannah123.github.io/STEMportfolio/og-image.jpg">
 <meta property="og:image:alt" content="Hand-drawn presentation board for Medi-Pod, a medicine dispenser">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#ebede6">
+<meta name="theme-color" content="#fffdf2">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%232c5a6e'/%3E%3Crect x='4' y='4' width='56' height='56' fill='none' stroke='%23cf5a1f' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' text-anchor='middle' fill='%23ebede6'%3EHH%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,700;1,6..72,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap">
 <style>
   /* Single light theme on purpose. Layout: a drafting sheet. Section labels sit in a left margin column like drawing callouts,
      the hero carries a title block, and thin dimension lines replace decoration. Square edges only. */
@@ -401,6 +401,239 @@
   /* Softer images: the scans are bright white paper, so tone them down to sit on the drafting-paper background */
   img:not(.stamp img), video { filter: brightness(.86) contrast(.96); }
   .gallery img.contain { background: #dcdcd8; }
+
+  /* =====================================================================
+     Theme: ink-blue line work on pastel paper.
+     ===================================================================== */
+  :root {
+    --ink: #2e3664;
+    --ink-soft: rgba(0, 0, 0, .14);
+    --edge: #111;
+    --lilac: #e7def0;
+    --butter: #f5edc4;
+    --cyan: #d7e8ea;
+    --pink: #f0d5de;
+    --bg: #faf7f0;
+    --sheet: #ffffff;
+    --fg: var(--ink);
+    --muted: var(--ink);
+    --line: rgba(0, 0, 0, .28);
+    --accent: var(--ink);
+    --mark: var(--ink);
+    --material: rgba(255, 255, 255, .62);
+    --display: "Instrument Serif", ui-serif, Georgia, serif;
+    --body: "Afacad", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --pop: 2px 3px 0 var(--ink-soft);
+    --pop-lg: 4px 5px 0 var(--ink-soft);
+    --fs-body: 1.1875rem;
+    --fs-base: 1.0625rem;
+  }
+  html { background: var(--bg); }
+  body {
+    background: linear-gradient(180deg, #ffffff 0, #faf7f0 18rem, #f6f0df 55%, #f1ebf2 85%, #ebe3ee 100%) fixed;
+    color: var(--ink); padding-bottom: 6rem;
+  }
+  #field { display: none; }
+  img, video { filter: none !important; }
+  a { color: var(--ink); }
+  ::selection { background: #e4e2dc; color: #111; }
+  h1, h2, h3, h4, h5 { font-weight: 400 !important; color: var(--ink); }
+  strong, b { font-weight: 600; }
+  .points strong, .stage p strong, .lede strong, .spec strong, .steps span strong { background: none; }
+
+  /* Pills: the basic button shape everywhere */
+  button.copy, .desk-reset {
+    font: 500 var(--fs-sm)/1 var(--body); color: var(--ink); background: #fff; border: 1.5px solid var(--edge); border-radius: 999px;
+    padding: 0.55rem 1rem; box-shadow: var(--pop); transition: transform 120ms ease-out, box-shadow 120ms ease-out;
+  }
+  button.copy:active, .desk-reset:active { background: var(--butter); color: var(--ink); transform: translate(2px, 3px); box-shadow: 0 0 0 transparent; }
+  button.copy:disabled:active { background: #fff; transform: none; box-shadow: var(--pop); }
+
+  /* Nav */
+  nav { background: var(--material); }
+  nav::after { background: linear-gradient(rgba(255, 255, 255, .7), rgba(255, 255, 255, 0)); }
+  .mark { font-family: var(--display); font-weight: 400; font-size: 1.6rem; letter-spacing: 0; }
+  .navlinks { gap: 0.5rem; font-family: var(--display); font-size: 1.15rem; font-weight: 400; }
+  .navlinks a { border: 1.5px solid var(--edge); border-radius: 999px; padding: 0.15rem 1rem 0.25rem; background: var(--lilac); box-shadow: var(--pop); text-decoration: none !important; transition: transform 120ms ease-out, box-shadow 120ms ease-out; }
+  .navlinks a:nth-child(2) { background: var(--butter); }
+  .navlinks a:nth-child(3) { background: var(--cyan); }
+  .navlinks a[aria-current="true"] { background: var(--ink); color: #fff; }
+  .navlinks a:active { transform: translate(2px, 3px); box-shadow: none; opacity: 1; }
+  @media (max-width: 600px) { .navlinks { overflow: visible; gap: 0.5rem; padding-bottom: 0.5rem; } }
+
+  /* Hero: the desk */
+  .hero2 { padding-top: 2.5rem; }
+  .hero2-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; }
+  .hero2 h1 { font-family: var(--display); font-size: clamp(3.4rem, 9vw, 6.5rem); line-height: .92; letter-spacing: -0.01em; }
+  .hero2 h1 .ch { display: inline-block; white-space: pre; animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
+  .hero-sub { font-family: var(--display); font-size: clamp(1.35rem, 2.7vw, 2.05rem); line-height: 1.18; max-width: 32ch; margin-top: 0.75rem; }
+  .chips { list-style: none; margin: 1.25rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip { border: 1.5px solid var(--edge); border-radius: 999px; padding: 0.25rem 0.85rem 0.3rem; background: #fff; box-shadow: var(--pop); font-size: var(--fs-sm); font-weight: 500; }
+  .chip:nth-child(3n+1) { background: var(--lilac); } .chip:nth-child(3n+2) { background: var(--butter); } .chip:nth-child(3n) { background: var(--cyan); }
+  .chip a { text-decoration: none; }
+  .hero2 .stamp { position: relative; top: auto; right: auto; flex: none; width: clamp(110px, 14vw, 170px); color: var(--ink); }
+  .hero2 .stamp .disc { fill: var(--butter); }
+  .hero2 .stamp text { font-family: var(--body); font-size: 9px; font-weight: 600; letter-spacing: .12em; }
+  .hero2 .stamp .core { font-family: var(--display); font-size: 40px; font-weight: 400; letter-spacing: 0; }
+  @media (max-width: 600px) { .hero2-top { flex-direction: column-reverse; } .hero2 .stamp { width: 96px; } }
+
+  .desk {
+    position: relative; margin-top: 2rem; height: 600px; overflow: hidden; touch-action: pan-y;
+    border: 2px solid var(--edge); border-radius: 28px; box-shadow: var(--pop-lg);
+    background-color: #faf6e6;
+    background-image: linear-gradient(rgba(46,54,100,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(46,54,100,.06) 1px, transparent 1px);
+    background-size: 28px 28px; background-position: -1px -1px;
+  }
+  .desk-item {
+    position: absolute; display: grid; gap: 4px; margin: 0; padding: 7px 7px 0; background: #fff; color: var(--ink);
+    border: 2px solid var(--edge); border-radius: 12px; box-shadow: 3px 4px 0 var(--ink-soft);
+    cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; text-align: left; font: inherit;
+    transform-origin: 50% 50%; will-change: transform;
+  }
+  .desk-item:active { cursor: grabbing; }
+  .desk-item img { display: block; width: 100%; height: auto; border-radius: 6px; pointer-events: none; }
+  .desk-label { font-family: var(--display); font-size: 1.05rem; line-height: 1.1; padding: 2px 3px 7px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .desk-note {
+    position: absolute; right: 2%; bottom: 7%; z-index: 1; width: 13rem; margin: 0; padding: 0.9rem 1rem 1rem;
+    background: var(--butter); border: 1.5px solid var(--edge); border-radius: 4px; box-shadow: var(--pop);
+    font-family: var(--display); font-size: 1.3rem; line-height: 1.15; transform: rotate(3deg);
+  }
+  .desk-reset { position: absolute; left: 1rem; bottom: 1rem; z-index: 900; }
+  @media (max-width: 600px) {
+    .desk { height: 800px; border-radius: 22px; margin-top: 1.5rem; }
+    .desk-note { right: 4%; bottom: 2.5%; width: 11rem; font-size: 1.1rem; padding: 0.6rem 0.75rem 0.7rem; }
+    .desk-label { font-size: 0.9rem; }
+  }
+
+  /* Switch: three big pills */
+  .switch { margin-top: 2.5rem; gap: 1rem; border: 0; background: none; }
+  .switch-btn { border: 2px solid var(--edge) !important; border-radius: 22px; background: var(--lilac); box-shadow: var(--pop-lg); padding: 1.1rem 1.25rem 1.2rem; transition: transform 120ms ease-out, box-shadow 120ms ease-out; }
+  .switch-btn:nth-child(2) { background: var(--butter); }
+  .switch-btn:nth-child(3) { background: var(--cyan); }
+  .switch-name { font-size: clamp(1.9rem, 3.6vw, 2.6rem); }
+  .switch-note { font-size: var(--fs-sm); }
+  .switch-btn[aria-selected="true"] { background: var(--ink); color: #fff; }
+  .switch-btn[aria-selected="true"] .switch-name, .switch-btn[aria-selected="true"] .switch-note { color: #fff; }
+  .switch-btn:active { transform: translate(3px, 4px); box-shadow: none; }
+  @media (max-width: 600px) { .switch { gap: 0.5rem; } .switch-btn { border-radius: 16px; padding: 0.8rem 0.7rem 0.9rem; } }
+
+  /* Chapters and sections */
+  .chapter-head { border-bottom: 0; padding-block: 4rem 1.5rem; }
+  .chapter-title { font-size: clamp(4rem, 10vw, 7.5rem); line-height: .9; color: var(--ink); text-shadow: 3px 3px 0 #fff, 5px 5px 0 var(--butter); }
+  .chapter-lede { font-size: clamp(1.25rem, 2.3vw, 1.6rem); }
+  .chapter-index a { border: 1.5px solid var(--edge); border-radius: 999px; padding: 0.15rem 0.85rem 0.25rem; background: #fff; box-shadow: var(--pop); text-decoration: none; }
+  section { border-bottom: 0; padding-block: 2.5rem; }
+  .row > aside h2, .record-head h4, .sub-head {
+    justify-self: start; align-self: start; display: inline-block; font-family: var(--display); font-size: 1.55rem; line-height: 1.1;
+    padding: 0.3rem 1rem 0.4rem; border: 1.5px solid var(--edge); border-radius: 999px; background: var(--butter); box-shadow: var(--pop);
+  }
+  #experience .row > aside h2 { background: var(--lilac); }
+  #drawings .row > aside h2 { background: var(--cyan); }
+  .record-head h4 { background: var(--cyan); }
+  .sub-head { background: var(--lilac); }
+
+  /* Cards */
+  .featured, .entry, .stage, .callouts li, .steps li, .contact .chapter-side {
+    background: rgba(255, 255, 255, .78); border: 2px solid var(--edge) !important; border-radius: 20px; box-shadow: var(--pop-lg);
+  }
+  .featured { padding: clamp(1rem, 2.5vw, 1.75rem); }
+  .featured h3 { font-size: clamp(3rem, 6vw, 4.5rem); }
+  .featured .intro p.big { font-family: var(--display); font-size: 1.6rem; font-weight: 400; }
+  .spec { border-top: 1.5px dashed var(--line); }
+  .spec dt, .spec dd { border-bottom: 1.5px dashed var(--line); }
+  .callouts { border-left: 0; display: grid; gap: 0.6rem; }
+  .callouts li { padding: 0.8rem 1rem; border-radius: 14px; }
+  .callouts li:nth-child(3n+1) { background: #f5f0f7; } .callouts li:nth-child(3n+2) { background: #faf6e6; } .callouts li:nth-child(3n) { background: #eef4f5; }
+  .callouts li::before { display: none; }
+  .steps { border-top: 0; gap: 0.75rem; }
+  .steps li, .steps li + li { padding: 1rem !important; border-radius: 16px; }
+  .steps li::before, .stage-text::before { font-family: var(--display); color: var(--ink); width: 2.1rem; height: 2.1rem; display: grid; place-items: center; border: 1.5px solid var(--edge); border-radius: 50%; background: var(--butter); font-size: 1.25rem; line-height: 1; }
+  .steps strong { font-size: 1.6rem; font-weight: 400; }
+  .record-head { border-bottom: 0; padding-bottom: 0.5rem; }
+  .stage { padding: 1.1rem; margin-bottom: 1rem; border-bottom: 2px solid var(--edge); }
+  .stage h5 { font-size: 1.6rem; }
+  .log .entry { padding: 1.25rem; margin-bottom: 1rem; }
+  .entry h3 { font-size: 2rem; }
+  .entry .prog { font-weight: 600; }
+  .points li::marker { color: var(--ink); }
+  .tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tags li { font-size: 0.8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 0.2rem 0.65rem 0.25rem; border: 1.5px solid var(--edge); border-radius: 999px; background: var(--lilac); }
+  .tags li:nth-child(3n+2) { background: var(--butter); } .tags li:nth-child(3n) { background: var(--cyan); }
+
+  /* Photos and frames */
+  .shot, .gallery .frame, .gallery a, .gallery button.frame, .mat { border: 2px solid var(--edge) !important; border-radius: 14px; box-shadow: var(--pop); overflow: hidden; }
+  .mat { background: #fff; }
+  .lead .shot { border-radius: 20px; box-shadow: var(--pop-lg); }
+  .cap, .gallery figcaption, .art-meta { color: var(--ink); }
+  .art-title { font-family: var(--display); font-size: 1.35rem; font-weight: 400; }
+
+  /* Contact */
+  .contact .chapter-side { padding: 1.5rem; }
+  .contact .email { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+  .contact .email-line { border-bottom: 1.5px dashed var(--line); }
+
+  /* Footer ticker */
+  footer { padding-block: 3rem 1rem; font-size: var(--fs-sm); }
+  html { overflow-x: clip; }
+  .ticker { overflow: hidden; border-top: 1.5px solid var(--edge); border-bottom: 1.5px solid var(--edge); margin: 0 calc(50% - 50vw) 1.5rem; padding: 0.55rem 0; background: rgba(255, 255, 255, .5); }
+  .ticker-track { display: flex; width: max-content; gap: 1.75rem; font-family: var(--display); font-size: 1.35rem; white-space: nowrap; animation: tick 60s linear infinite; }
+  .ticker-track i { font-style: italic; }
+  .ticker-track span::after { content: "✦"; margin-left: 1.75rem; color: var(--pink); }
+  @keyframes tick { to { transform: translateX(-50%); } }
+
+  /* Floating contact dock */
+  .dock {
+    position: fixed; left: 50%; bottom: max(1rem, env(safe-area-inset-bottom)); z-index: 6; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0.5rem 0.45rem 1rem;
+    background: var(--material); -webkit-backdrop-filter: blur(16px) saturate(180%); backdrop-filter: blur(16px) saturate(180%);
+    border: 2px solid var(--edge); border-radius: 999px; box-shadow: var(--pop-lg); font-family: var(--display); font-size: 1.25rem; color: var(--ink);
+    white-space: nowrap;
+  }
+  @media (max-width: 600px) { .dock { font-size: 1.1rem; gap: 0.5rem; padding: 0.35rem 0.4rem 0.35rem 0.8rem; } .dock-btn { width: 2rem; height: 2rem; } }
+  .dock-dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--pink); border: 1.5px solid var(--edge); }
+  .dock-sep { width: 1.5px; height: 1.4rem; background: var(--ink); opacity: .5; }
+  .dock-btn { width: 2.25rem; height: 2.25rem; display: grid; place-items: center; border: 1.5px solid var(--edge); border-radius: 50%; background: var(--butter); text-decoration: none; font: 700 0.95rem var(--body); transition: transform 120ms ease-out; }
+  .dock-btn:nth-of-type(2) { background: var(--lilac); }
+  .dock-btn svg { width: 1.15rem; height: 1.15rem; }
+  .dock-btn:active { transform: scale(.92); opacity: 1; }
+  html.viewing .dock { display: none; }
+
+  /* Viewer chrome */
+  .viewer-bar, .viewer-foot { background: rgba(255, 255, 255, .7); }
+  .viewer-scrim { background: #fffdf2; }
+  .viewer-stage img { border: 2px solid var(--edge); border-radius: 10px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track { animation: none; }
+    .desk-item { transition: none; }
+  }
+  @media (prefers-reduced-transparency: reduce) { .dock { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; } }
+
+  /* Medi-Pod: its own full-width section inside STEM */
+  .mp-section { padding-top: 1rem; }
+  .mp-section > .row { grid-template-columns: 1fr; }
+  .mp-head { display: grid; gap: 0.75rem; justify-items: start; margin: 0 0 2rem; padding: 2rem 2rem 1.75rem; border: 1.5px solid var(--edge); border-radius: 28px;
+    background: linear-gradient(135deg, var(--butter), #fff 55%, var(--lilac)); box-shadow: var(--pop-lg); }
+  .mp-kicker { margin: 0; font-size: 1rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 0.2rem 0.8rem 0.25rem; border: 1.5px solid var(--edge); border-radius: 999px; background: var(--pink); color: var(--ink); }
+  .mp-title { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(3.5rem, 9vw, 6.5rem); line-height: .95; color: var(--ink); text-shadow: 3px 3px 0 #fff, 5px 5px 0 var(--cyan); }
+  .mp-jump { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-self: stretch; }
+  .mp-jump a { border: 1.5px solid var(--edge); border-radius: 999px; padding: 0.2rem 0.9rem 0.3rem; background: #fff; box-shadow: var(--pop); text-decoration: none; color: var(--ink); }
+  .mp-jump a:active { transform: translate(2px, 3px); box-shadow: none; }
+  #medi-pod-overview, #medi-pod-story, #process { scroll-margin-top: 1.5rem; }
+  .chip-hot { background: var(--ink) !important; }
+  .chip-hot a { color: #fff !important; }
+  @media (max-width: 600px) { .mp-head { padding: 1.5rem 1.25rem 1.25rem; border-radius: 20px; } }
+
+  /* Desk pieces are links now */
+  .desk-item { cursor: pointer; }
+  .desk-where { position: absolute; top: 10px; right: 10px; font: 600 0.7rem/1 var(--body); letter-spacing: .05em; text-transform: uppercase; color: var(--ink);
+    padding: 0.3rem 0.55rem 0.35rem; background: rgba(255, 255, 255, .9); border: 1.5px solid var(--edge); border-radius: 999px; pointer-events: none; }
+  .flash { animation: flash 2s ease-out; border-radius: 14px; }
+  @keyframes flash { 0%, 35% { outline: 3px solid var(--edge); outline-offset: 6px; } 100% { outline: 3px solid transparent; outline-offset: 12px; } }
+  @media (prefers-reduced-motion: reduce) { .flash { animation-duration: .01s; outline: 3px solid var(--edge); } }
+
+  /* Dragging pieces never selects text on the page */
+  .desk { -webkit-user-select: none; user-select: none; }
 </style>
 </head>
 <body>
@@ -420,27 +653,35 @@
 </nav>
 
 <main class="wrap" id="top">
-  <header class="hero">
-    <div class="stamp" aria-hidden="true">
-      <svg viewBox="0 0 160 160">
-        <g class="ring">
-          <defs><path id="circ" d="M80,80 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0"/></defs>
-          <circle cx="80" cy="80" r="76" fill="none" stroke="currentColor" stroke-width="1.5"/>
-          <circle cx="80" cy="80" r="48" fill="none" stroke="currentColor" stroke-width="1"/>
-          <text><textPath href="#circ">CAD Modeling / Prototyping / Human-Centered Design / </textPath></text>
-        </g>
-        <text class="core" x="80" y="91" text-anchor="middle">HH</text>
-      </svg>
+  <header class="hero2">
+    <div class="hero2-top">
+      <div class="hero2-text">
+        <h1 id="name"><span class="w">Hannah's desk.</span></h1>
+        <p class="hero-sub">Hannah Huang; industrial engineering and product design, plus painting and drawing. Based in Manhasset, NY.</p>
+        <ul class="chips">
+          <li class="chip chip-hot"><a href="#medi-pod">Medi-Pod story ↓</a></li>
+          <li class="chip">CAD modeling</li>
+          <li class="chip">Prototyping</li>
+          <li class="chip">Human-centered design</li>
+          <li class="chip"><a href="https://www.linkedin.com/in/hannah-h-a89bb93b3" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+          <li class="chip"><a href="#contact">Email</a></li>
+        </ul>
+      </div>
+      <div class="stamp" aria-hidden="true">
+        <svg viewBox="0 0 160 160">
+          <g class="ring">
+            <defs><path id="circ" d="M80,80 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0"/></defs>
+            <circle class="disc" cx="80" cy="80" r="76" stroke="currentColor" stroke-width="2"/>
+            <circle cx="80" cy="80" r="48" fill="#fff" stroke="currentColor" stroke-width="1.5"/>
+            <text><textPath href="#circ">CAD Modeling / Prototyping / Human-Centered Design / </textPath></text>
+          </g>
+          <text class="core" x="80" y="92" text-anchor="middle">HH</text>
+        </svg>
+      </div>
     </div>
-    <div class="hero-main">
-      <h1 id="name"><span class="w">Hannah</span><br><span class="w">Huang</span></h1>
-      <div class="dim"><i></i><span>CAD modeling, prototyping, and human-centered design</span><i></i></div>
-    </div>
-    <div class="titleblock">
-      <div><span class="label">Focus</span><span class="value">Industrial engineering</span></div>
-      <div><span class="label">Art</span><span class="value">Painting and drawing</span></div>
-      <div><span class="label">Based in</span><span class="value">Manhasset, NY</span></div>
-      <div><span class="label">Links</span><span class="value"><a href="https://www.linkedin.com/in/hannah-h-a89bb93b3" target="_blank" rel="noopener">LinkedIn</a>&ensp;<a href="#contact">Email</a></span></div>
+    <div class="desk" id="desk" aria-label="Desk: drag the work around, or tap a piece to go to it">
+      <p class="desk-note">Drag my work around the desk. Tap a piece to jump to it.</p>
+      <button class="copy desk-reset" type="button" id="desk-reset">Reset desk ↺</button>
     </div>
   </header>
 
@@ -462,13 +703,20 @@
       </div>
     </header>
 
-  <section id="medi-pod">
+  <section id="medi-pod" class="mp-section">
+    <header class="mp-head">
+      <p class="mp-kicker">Passion project</p>
+      <h3 class="mp-title">Medi-Pod</h3>
+      <div class="mp-jump" role="navigation" aria-label="Medi-Pod sections">
+        <a href="#medi-pod-overview">Overview</a>
+        <a href="#medi-pod-story">How it developed</a>
+        <a href="#process">Process record</a>
+      </div>
+    </header>
     <div class="row">
-      <aside><h2>Featured project</h2></aside>
       <div class="content">
-        <div class="featured">
+        <div class="featured" id="medi-pod-overview">
           <div class="intro">
-            <h3>Medi-Pod</h3>
             <p class="sub">Self-led pilot project in Queens, NY, from September to October 2026</p>
             <p class="big">A 4-in-1 medicine dispenser for elderly users with memory loss.</p>
             <p class="lede">An independent continuation of my <strong>Georgia Tech prototype</strong> with <strong>Allen Senior Home</strong>, revised around what users most reliably forget.</p>
@@ -488,7 +736,7 @@
 
         <figure class="lead" id="medi-lead"></figure>
 
-        <div class="process">
+        <div class="process" id="medi-pod-story">
           <h4 class="sub-head">How it developed</h4>
           <ol class="steps">
             <li><span class="when-s">Summer 2026, Georgia Tech</span><strong>Listen</strong><span>Ran direct <strong>user-research interviews</strong> with older adults and caregivers.</span></li>
@@ -589,7 +837,16 @@
   </dialog>
 
   <footer><span>© <span id="year">2026</span> Hannah Huang</span><span>Manhasset, NY</span></footer>
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
 </main>
+
+<div class="dock" role="group" aria-label="Get in touch">
+  <span class="dock-dot" aria-hidden="true"></span>
+  <span class="dock-text">Say hi</span>
+  <span class="dock-sep" aria-hidden="true"></span>
+  <a class="dock-btn" href="mailto:hannahhuang0407@gmail.com" aria-label="Email Hannah"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.8 7l8.2 6 8.2-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a>
+  <a class="dock-btn" href="https://www.linkedin.com/in/hannah-h-a89bb93b3" target="_blank" rel="noopener" aria-label="Hannah on LinkedIn"><span aria-hidden="true">in</span></a>
+</div>
 
 <script>
   // Programs, newest first. Edit text here.
@@ -852,7 +1109,7 @@
         <h3>${esc(e.org)}</h3>
         <p class="prog">${esc(e.role)}</p>
         <ul class="points">${e.points.map(p => `<li>${rich(p)}</li>`).join("")}</ul>
-        ${e.tools ? `<p class="tools"><b>Tools</b>${esc(e.tools)}</p>` : ""}
+        ${e.tools ? `<ul class="tags" aria-label="Tools">${e.tools.split(/,\s*/).map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
         ${e.link ? `<p><a href="${esc(e.link.href)}">${esc(e.link.text)}</a></p>` : ""}
         ${e.media ? `<div class="gallery">${e.media.map(figure).join("")}</div>` : ""}
       </div>
@@ -1268,6 +1525,121 @@
     if (e.key === "0") resetZoom();
   });
 
+
+  /* ---------- Desk: my own work spread out like papers. Drag pieces around (they keep their momentum), tap one to look closer. ---------- */
+  (() => {
+    const desk = document.getElementById("desk");
+    if (!desk) return;
+    const p = n => ART.paintings.find(m => m.title === n), d = n => ART.drawings.find(m => m.title === n);
+    const cup = EXPERIENCE[1].media[0];
+    const artTile = t => [...document.querySelectorAll(".art")].find(f => f.querySelector(".art-title")?.textContent === t);
+    // [left %, top %, width %, tilt deg] for wide screens (d) and phones (m)
+    const ITEMS = [
+      { go: () => document.getElementById("medi-pod"), where: "STEM", src: MEDIPOD.lead.src, label: "Medi-Pod", caption: MEDIPOD.lead.caption, ar: MEDIPOD.lead.r, d: [3, 6, 31, -4], m: [3, 2, 60, -3] },
+      { go: () => document.querySelectorAll("#experience-list > li")[1], where: "STEM", src: cup.src, label: "Gyroscope cup holder", caption: cup.caption, ar: 0.75, d: [37, 3, 15, 3], m: [64, 3, 33, 4] },
+      { go: () => artTile("Seasick Green"), where: "Art", src: p("Seasick Green").src, label: "Seasick Green", caption: "Seasick Green. Oil Paint, 20 × 24 in, 2026", ar: p("Seasick Green").w / p("Seasick Green").h, d: [55, 9, 24, -2], m: [4, 26, 50, -2] },
+      { go: () => artTile("Chasing Daylight"), where: "Art", src: p("Chasing Daylight").src, label: "Chasing Daylight", caption: "Chasing Daylight. Oil Paint, 24 × 20 in, 2026", ar: p("Chasing Daylight").w / p("Chasing Daylight").h, d: [82, 3, 15, 5], m: [57, 25, 38, 5] },
+      { go: () => artTile("Process Board I"), where: "Art", src: d("Process Board I").src, label: "Process Board I", caption: "Process Board I. Pencil, Ink pen, 18 × 24 in, 2026", ar: d("Process Board I").w / d("Process Board I").h, d: [12, 50, 28, 3], m: [4, 50, 54, 3] },
+      { go: () => artTile("Product sketches"), where: "Art", src: d("Product sketches").src, label: "Product sketches", caption: "Product sketches over construction boxes: earbud case, perfume bottle, sports car", ar: d("Product sketches").w / d("Product sketches").h, d: [44, 46, 15, -6], m: [61, 49, 34, -5] },
+      { go: () => artTile("VeeVee's Carapace"), where: "Art", src: p("VeeVee's Carapace").src, label: "VeeVee's Carapace", caption: "VeeVee's Carapace. Oil Paint, 20 × 24 in, 2026", ar: p("VeeVee's Carapace").w / p("VeeVee's Carapace").h, d: [60, 50, 19, 2], m: [6, 72, 42, 2] }
+    ];
+    let top = 10;
+    const items = ITEMS.map(it => {
+      const el = document.createElement("button");
+      el.type = "button"; el.className = "desk-item";
+      el.setAttribute("aria-label", `Go to ${it.label} in ${it.where}`);
+      el.innerHTML = `<img src="${it.src}" alt="${esc(it.caption)}" draggable="false" style="aspect-ratio:${it.ar}"><span class="desk-where">${it.where} →</span><span class="desk-label">${esc(it.label)}</span>`;
+      desk.appendChild(el);
+      const S = { x: 0, y: 0, r: 0 };
+      const o = { it, el, S, base: 0 };
+      o.render = () => { el.style.transform = `translate3d(${S.x}px, ${S.y}px, 0) rotate(${o.base + S.r}deg)`; };
+      o.sp = springSystem(S, o.render);
+      el.style.zIndex = ++top;
+      return o;
+    });
+    const place = () => {
+      const phone = desk.clientWidth < 600;
+      items.forEach(o => {
+        const [x, y, w, r] = phone ? o.it.m : o.it.d;
+        Object.assign(o.el.style, { left: x + "%", top: y + "%", width: w + "%" });
+        o.base = r; o.render();
+      });
+    };
+    place();
+    let lastW = desk.clientWidth;
+    addEventListener("resize", () => { if (desk.clientWidth !== lastW) { lastW = desk.clientWidth; place(); } });
+
+    // Keep at least part of a piece on the desk when it is thrown
+    const keepIn = (o, x, y) => {
+      const dr = desk.getBoundingClientRect(), w = o.el.offsetWidth, h = o.el.offsetHeight;
+      const left = o.el.offsetLeft, topPx = o.el.offsetTop, edge = 0.35;
+      return [Math.max(-left - w * (1 - edge), Math.min(dr.width - left - w * edge, x)),
+              Math.max(-topPx, Math.min(dr.height - topPx - h * edge, y))];
+    };
+    items.forEach(o => {
+      let g = null;
+      o.el.addEventListener("pointerdown", e => {
+        if (e.button !== 0) return;
+        o.el.setPointerCapture(e.pointerId);
+        o.sp.stop("x", "y", "r");                       // grab it mid-flight: it stops right where it is
+        o.el.style.zIndex = ++top;
+        g = { id: e.pointerId, x0: e.clientX, y0: e.clientY, sx: o.S.x, sy: o.S.y, moved: false, hist: [[e.timeStamp, e.clientX, e.clientY]] };
+      });
+      o.el.addEventListener("pointermove", e => {
+        if (!g || e.pointerId !== g.id) return;
+        const dx = e.clientX - g.x0, dy = e.clientY - g.y0;
+        if (!g.moved && Math.hypot(dx, dy) < 6) return;
+        g.moved = true;
+        g.hist.push([e.timeStamp, e.clientX, e.clientY]);
+        while (g.hist.length > 2 && e.timeStamp - g.hist[0][0] > 100) g.hist.shift();
+        const [vx] = releaseVelocity(g.hist, e.timeStamp + 1);
+        o.S.x = g.sx + dx; o.S.y = g.sy + dy;
+        o.S.r = calm ? 0 : Math.max(-10, Math.min(10, vx / 120));   // tilts the way it is being pulled
+        o.render();
+      });
+      const up = e => {
+        if (!g || e.pointerId !== g.id) return;
+        const moved = g.moved, [vx, vy] = releaseVelocity(g.hist, e.timeStamp); g = null;
+        if (!moved) return;                            // a tap: the click opens the viewer
+        o.el._dragged = true;
+        const [tx, ty] = keepIn(o, o.S.x + (calm ? 0 : project(vx, 0.99)), o.S.y + (calm ? 0 : project(vy, 0.99)));
+        if (calm) { Object.assign(o.S, { x: tx, y: ty, r: 0 }); return o.render(); }
+        o.sp.to("x", tx, { velocity: vx, damping: 0.85, response: 0.45 });
+        o.sp.to("y", ty, { velocity: vy, damping: 0.85, response: 0.45 });
+        o.sp.to("r", 0, { damping: 0.8, response: 0.4, eps: 0.05 });
+      };
+      o.el.addEventListener("pointerup", up); o.el.addEventListener("pointercancel", up);
+    });
+    // After a drag, the release is not a tap: don't open the viewer
+    desk.addEventListener("click", e => {
+      const b = e.target.closest(".desk-item");
+      if (b && b._dragged) { b._dragged = false; e.stopPropagation(); e.preventDefault(); }
+    }, true);
+    // A tap goes to that piece: switch to its panel, scroll it into view, and flash it so it's easy to spot
+    desk.addEventListener("click", e => {
+      const b = e.target.closest(".desk-item"); if (!b) return;
+      const o = items.find(x => x.el === b), t = o && o.it.go(); if (!t) return;
+      const panel = t.closest("[data-panel]");
+      if (panel && window.__showPanel) window.__showPanel(panel.id);
+      requestAnimationFrame(() => {
+        t.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: t.classList.contains("art") ? "center" : "start" });
+        t.classList.remove("flash"); void t.offsetWidth; t.classList.add("flash");
+        setTimeout(() => t.classList.remove("flash"), 2200);
+      });
+    });
+    document.getElementById("desk-reset").addEventListener("click", () => {
+      items.forEach((o, k) => setTimeout(() => {
+        if (calm) { Object.assign(o.S, { x: 0, y: 0, r: 0 }); return o.render(); }
+        o.sp.to("x", 0, { response: 0.5 }); o.sp.to("y", 0, { response: 0.5 }); o.sp.to("r", 0, { eps: 0.05 });
+      }, calm ? 0 : k * 40));
+    });
+
+    // Ticker of project and artwork titles along the bottom
+    const names = ["Medi-Pod", "Gyroscope cup holder", ...ART.paintings.map(m => m.title), ...ART.drawings.filter(m => m.size).map(m => m.title)];
+    const row = names.map(n => `<span><i>${esc(n)}</i></span>`).join("");
+    document.getElementById("ticker").innerHTML = row + row;
+  })();
+
   // The Blender clip loops when on screen; with reduced motion it waits for the play control
   const calmVideo = matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.querySelectorAll(".strip video").forEach(v => {
@@ -1320,6 +1692,7 @@
     const now = document.getElementById(id);
     if (was !== now && now.animate) now.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: "ease-out" });
   };
+  window.__showPanel = showPanel;
   const reveal = (target, fromSwitch) => {
     const panel = target.closest("[data-panel]");
     if (!panel) return false;
