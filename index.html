@@ -13,8 +13,8 @@
 <meta property="og:image" content="https://huanghannah123.github.io/STEMportfolio/og-image.jpg">
 <meta property="og:image:alt" content="Hand-drawn presentation board for Medi-Pod, a medicine dispenser">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#fffdf2">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%232c5a6e'/%3E%3Crect x='4' y='4' width='56' height='56' fill='none' stroke='%23cf5a1f' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' text-anchor='middle' fill='%23ebede6'%3EHH%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000'/%3E%3Crect x='4' y='4' width='56' height='56' fill='none' stroke='%23fff' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='28' text-anchor='middle' fill='%23fff'%3EHH%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap">
@@ -22,15 +22,15 @@
   /* Single light theme on purpose. Layout: a drafting sheet. Section labels sit in a left margin column like drawing callouts,
      the hero carries a title block, and thin dimension lines replace decoration. Square edges only. */
   :root {
-    --bg: #ebede6;        /* drafting paper, grey-green */
-    --sheet: #f1f2ec;     /* slightly lighter panel, still not white */
+    --bg: #ffffff;        /* drafting paper, grey-green */
+    --sheet: #f2f2f2;     /* slightly lighter panel, still not white */
     --fg: #000000;
     --muted: #000000;   /* secondary text is black too, for readability */
-    --drift: #59615c;   /* background construction lines only */
-    --line: #c4c9bf;
-    --grid: #dde1d7;
-    --accent: #2c5a6e;    /* ink teal */
-    --mark: #cf5a1f;      /* marker orange, used sparingly */
+    --drift: #888888;   /* background construction lines only */
+    --line: #cccccc;
+    --grid: #ececec;
+    --accent: #000000;    /* ink teal */
+    --mark: #000000;      /* marker orange, used sparingly */
     color-scheme: light;
     /* System faces first: they ship optical sizing and tracking tables. Web fonts only where the system has no match. */
     --display: ui-serif, "Newsreader", Georgia, "Times New Roman", serif;
@@ -42,7 +42,7 @@
     --track-lg: -0.01em;
     --track-md: -0.005em;
     --track-sm: 0.01em;
-    --material: rgba(235, 237, 230, .72);   /* translucent paper for floating chrome */
+    --material: rgba(255, 255, 255, .72);   /* translucent paper for floating chrome */
     /* Type ramp: one scale, used everywhere */
     --fs-xs: .8125rem;  /* small labels */
     --fs-sm: .875rem;   /* meta text */
@@ -74,7 +74,7 @@
   h1, h2, h3, h4, h5 { font-family: var(--display); text-wrap: balance; margin: 0; font-optical-sizing: auto; }
   p { margin: 0; }
   strong, b { font-weight: 700; }
-  .points strong, .stage p strong, .lede strong, .spec strong, .steps span strong { color: var(--fg); background: linear-gradient(transparent 62%, rgba(207, 90, 31, .22) 62%); }
+  .points strong, .stage p strong, .lede strong, .spec strong, .steps span strong { color: var(--fg); background: linear-gradient(transparent 62%, rgba(0, 0, 0, .1) 62%); }
   .label { font-size: var(--fs-sm); font-weight: 400; letter-spacing: var(--track-sm); color: var(--muted); }
 
   /* Nav */
@@ -85,7 +85,7 @@
   }
   nav::after {
     content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 0.75rem; pointer-events: none;
-    background: linear-gradient(rgba(235, 237, 230, .8), rgba(235, 237, 230, 0));
+    background: linear-gradient(rgba(255, 255, 255, .8), rgba(255, 255, 255, 0));
     opacity: 0; transition: opacity .2s ease;
   }
   nav.edge::after { opacity: 1; }
@@ -394,26 +394,26 @@
   }
   /* More contrast: solid chrome with a defined edge, darker rules */
   @media (prefers-contrast: more) {
-    :root { --line: #6f766c; --material: var(--bg); }
+    :root { --line: #777777; --material: var(--bg); }
     nav, .viewer-bar, .viewer-foot { -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom: 1px solid var(--fg); }
     nav::after { display: none; }
   }
   /* Softer images: the scans are bright white paper, so tone them down to sit on the drafting-paper background */
   img:not(.stamp img), video { filter: brightness(.86) contrast(.96); }
-  .gallery img.contain { background: #dcdcd8; }
+  .gallery img.contain { background: #dddddd; }
 
   /* =====================================================================
      Theme: ink-blue line work on pastel paper.
      ===================================================================== */
   :root {
-    --ink: #2e3664;
+    --ink: #000000;
     --ink-soft: rgba(0, 0, 0, .14);
     --edge: #111;
-    --lilac: #e7def0;
-    --butter: #f5edc4;
-    --cyan: #d7e8ea;
-    --pink: #f0d5de;
-    --bg: #faf7f0;
+    --lilac: #f2f2f2;
+    --butter: #e6e6e6;
+    --cyan: #f7f7f7;
+    --pink: #ececec;
+    --bg: #ffffff;
     --sheet: #ffffff;
     --fg: var(--ink);
     --muted: var(--ink);
@@ -430,13 +430,13 @@
   }
   html { background: var(--bg); }
   body {
-    background: linear-gradient(180deg, #ffffff 0, #faf7f0 18rem, #f6f0df 55%, #f1ebf2 85%, #ebe3ee 100%) fixed;
+    background: #ffffff;
     color: var(--ink); padding-bottom: 6rem;
   }
   #field { display: none; }
   img, video { filter: none !important; }
   a { color: var(--ink); }
-  ::selection { background: #e4e2dc; color: #111; }
+  ::selection { background: #e5e5e5; color: #111; }
   h1, h2, h3, h4, h5 { font-weight: 400 !important; color: var(--ink); }
   strong, b { font-weight: 600; }
   .points strong, .stage p strong, .lede strong, .spec strong, .steps span strong { background: none; }
@@ -480,8 +480,8 @@
   .desk {
     position: relative; margin-top: 2rem; height: 600px; overflow: hidden; touch-action: pan-y;
     border: 2px solid var(--edge); border-radius: 28px; box-shadow: var(--pop-lg);
-    background-color: #faf6e6;
-    background-image: linear-gradient(rgba(46,54,100,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(46,54,100,.06) 1px, transparent 1px);
+    background-color: #f7f7f7;
+    background-image: linear-gradient(rgba(0,0,0,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.06) 1px, transparent 1px);
     background-size: 28px 28px; background-position: -1px -1px;
   }
   .desk-item {
@@ -543,7 +543,7 @@
   .spec dt, .spec dd { border-bottom: 1.5px dashed var(--line); }
   .callouts { border-left: 0; display: grid; gap: 0.6rem; }
   .callouts li { padding: 0.8rem 1rem; border-radius: 14px; }
-  .callouts li:nth-child(3n+1) { background: #f5f0f7; } .callouts li:nth-child(3n+2) { background: #faf6e6; } .callouts li:nth-child(3n) { background: #eef4f5; }
+  .callouts li:nth-child(3n+1) { background: #f5f5f5; } .callouts li:nth-child(3n+2) { background: #f7f7f7; } .callouts li:nth-child(3n) { background: #f5f5f5; }
   .callouts li::before { display: none; }
   .steps { border-top: 0; gap: 0.75rem; }
   .steps li, .steps li + li { padding: 1rem !important; border-radius: 16px; }
@@ -600,7 +600,7 @@
 
   /* Viewer chrome */
   .viewer-bar, .viewer-foot { background: rgba(255, 255, 255, .7); }
-  .viewer-scrim { background: #fffdf2; }
+  .viewer-scrim { background: #ffffff; }
   .viewer-stage img { border: 2px solid var(--edge); border-radius: 10px; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -613,7 +613,7 @@
   .mp-section { padding-top: 1rem; }
   .mp-section > .row { grid-template-columns: 1fr; }
   .mp-head { display: grid; gap: 0.75rem; justify-items: start; margin: 0 0 2rem; padding: 2rem 2rem 1.75rem; border: 1.5px solid var(--edge); border-radius: 28px;
-    background: linear-gradient(135deg, var(--butter), #fff 55%, var(--lilac)); box-shadow: var(--pop-lg); }
+    background: #f2f2f2; box-shadow: var(--pop-lg); }
   .mp-kicker { margin: 0; font-size: 1rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 0.2rem 0.8rem 0.25rem; border: 1.5px solid var(--edge); border-radius: 999px; background: var(--pink); color: var(--ink); }
   .mp-title { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(3.5rem, 9vw, 6.5rem); line-height: .95; color: var(--ink); text-shadow: 3px 3px 0 #fff, 5px 5px 0 var(--cyan); }
   .mp-jump { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-self: stretch; }
@@ -644,8 +644,8 @@
     background: #fff; border: 2px solid var(--edge); border-radius: 16px; box-shadow: var(--pop-lg); overflow: hidden;
     transition: transform 120ms ease-out, box-shadow 120ms ease-out; }
   .proj-tile:active { transform: translate(3px, 4px); box-shadow: none; opacity: 1; }
-  .proj-thumb { aspect-ratio: 4 / 3; overflow: hidden; border-bottom: 2px solid var(--edge); background: #faf6e6;
-    background-image: linear-gradient(rgba(46,54,100,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(46,54,100,.07) 1px, transparent 1px); background-size: 20px 20px; }
+  .proj-thumb { aspect-ratio: 4 / 3; overflow: hidden; border-bottom: 2px solid var(--edge); background: #f7f7f7;
+    background-image: linear-gradient(rgba(0,0,0,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.07) 1px, transparent 1px); background-size: 20px 20px; }
   .proj-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .proj-thumb.text { display: grid; place-items: center; padding: 1rem; text-align: center; font-family: var(--display); font-size: clamp(1.25rem, 2.4vw, 1.6rem); line-height: 1.1; }
   .proj-label { display: flex; align-items: baseline; gap: 0.6rem; padding: 0.55rem 0.85rem 0.65rem; background: var(--lilac); }
