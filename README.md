@@ -47,6 +47,7 @@ Oil paintings and mixed media, plus drawings in pencil, ink and charcoal: design
 
 <p align="center">
   <img src="stroke-by-stroke.jpg" alt="Painting of a rowing crew passing under bridge arches" width="360">
+  <br><sub><i>Stroke by Stroke</i></sub>
 </p>
 
 ## Other projects
