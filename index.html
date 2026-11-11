@@ -694,6 +694,13 @@
   .proj .gallery figcaption { text-align: center; font-size: var(--fs-sm); line-height: 1.4; padding-inline: 0.25rem; }
   @media (max-width: 480px) { .proj .gallery { grid-template-columns: 1fr; } }
 
+  /* Hyperbike: looping screen recording from Blender beside a short note */
+  .clip-row { display: grid; grid-template-columns: minmax(0, 15rem) 1fr; gap: 1.5rem; align-items: center; margin-top: 0.75rem; }
+  .clip-frame { border: 1px solid var(--edge); border-radius: 10px; overflow: hidden; background: #111; aspect-ratio: 9 / 16; }
+  .clip-frame video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .clip-text h4 { margin: 0 0 0.4rem; }
+  @media (max-width: 600px) { .clip-row { grid-template-columns: 1fr; justify-items: center; text-align: center; } .clip-frame { width: min(16rem, 100%); } }
+
   /* Hyperbike: the six renders laid out like the original presentation sheet. Each picture opens in the viewer with its story. */
   .proj .gallery.collage { grid-template-columns: 921fr 921fr 840fr; grid-template-rows: 714fr 630fr 642fr; gap: 0.6rem; aspect-ratio: 2700 / 2010; }
   .proj .gallery.collage figure { display: block; min-height: 0; }
@@ -1017,6 +1024,8 @@
       short: "Hyperbike",
       id: "hyperbike",
       collage: true,
+      clip: { src: "hyperbike-blender.mp4", poster: "hyperbike-blender-poster.jpg", title: "In Blender",
+        caption: "Spinning around the model in Blender's Shading view, with the material settings for one of the parts open underneath." },
       place: "Personal project",
       link: { href: "#hyperbike-photos", text: "Renders ↓" },
       media: [
@@ -1260,6 +1269,8 @@
         ${e.tools ? `<ul class="tags" aria-label="Tools">${e.tools.split(/,\s*/).map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
         ${e.media && e.collage ? `<div class="gallery collage" id="${esc(e.id)}-photos">${e.media.map((m, j) => `<figure class="c${j + 1}"><div class="frame"><img src="${url(m.src)}" alt="${esc(m.caption)}" data-desc="${esc(m.desc || "")}" decoding="async"><span class="chip">${esc(m.tag || "")}</span></div></figure>`).join("")}</div>`
           : e.media ? `<div class="gallery" id="${esc(e.id)}-photos">${e.media.map(figure).join("")}</div>` : ""}
+        ${e.clip ? `<div class="clip-row"><div class="clip-frame"><video src="${url(e.clip.src)}" poster="${url(e.clip.poster)}" ${calmGallery ? "controls" : "autoplay loop"} muted playsinline preload="metadata" aria-label="${esc(e.clip.caption)}"></video></div>
+          <div class="clip-text"><h4>${esc(e.clip.title)}</h4><p class="cap">${esc(e.clip.caption)}</p></div></div>` : ""}
         ${e.record ? `<div class="record" id="process">
           <div class="record-head">
             <h4>Process record</h4>
