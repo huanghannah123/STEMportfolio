@@ -769,7 +769,7 @@
   </header>
 
   <div class="switch" role="tablist" aria-label="Portfolio">
-    <a class="switch-btn" role="tab" href="#stem" aria-controls="stem" aria-selected="true"><span class="switch-name">STEM</span><span class="switch-note">Medi-Pod and engineering programs</span></a>
+    <a class="switch-btn" role="tab" href="#stem" aria-controls="stem" aria-selected="true"><span class="switch-name">STEM</span><span class="switch-note">Medi-Pod, engineering programs, and 3D modeling</span></a>
     <a class="switch-btn" role="tab" href="#art" aria-controls="art" aria-selected="false"><span class="switch-name">Art</span><span class="switch-note">Paintings and drawings</span></a>
     <a class="switch-btn" role="tab" href="#contact" aria-controls="contact" aria-selected="false"><span class="switch-name">Contact</span><span class="switch-note">Email and LinkedIn</span></a>
   </div>
@@ -842,7 +842,7 @@
 
   <section id="experience">
     <div class="row">
-      <aside><h2>Programs</h2></aside>
+      <aside><h2>Programs and projects</h2></aside>
       <div class="content">
         <ol class="log" id="experience-list"></ol>
       </div>
@@ -929,7 +929,7 @@
 </div>
 
 <script>
-  // Programs, newest first. Edit text here.
+  // Programs (newest first), then personal projects. Edit text here.
   const EXPERIENCE = [
     {
       org: "Georgia Institute of Technology",
@@ -990,6 +990,29 @@
       points: [
         "Built **interactive game characters and core gameplay logic** from scratch in **JavaScript**, applying object-oriented programming principles to an original build, and completed advanced coursework in data science and machine learning foundations.",
         "**Mentored 150+ girls worldwide** in coding fundamentals, measured by sustained Discord engagement and debugging support, leading peer troubleshooting sessions and confidence-building feedback."
+      ]
+    },
+    {
+      org: "2027 Koenigsegg Brutemera Hyperbike",
+      short: "Hyperbike",
+      id: "hyperbike",
+      place: "Personal project",
+      link: { href: "#hyperbike-photos", text: "Renders ↓" },
+      media: [
+        { src: "hyperbike-render.jpg", caption: "Final render, front three-quarter view: a glossy fairing over the tubular frame, with copper brake and wheel hubs and a chain drive" },
+        { src: "hyperbike-rear.jpg", caption: "Rear three-quarter view showing the swingarm, rear sprocket, and carbon rear fender" },
+        { src: "hyperbike-side.jpg", caption: "Left side of the finished model" },
+        { src: "hyperbike-frame.jpg", caption: "Step 1: the bare frame, with forks, swingarm, wheels, and placeholder blocks for the engine" },
+        { src: "hyperbike-clay.jpg", caption: "Step 2: a plain clay render to check the shape of the faceted bodywork" },
+        { src: "hyperbike-blockout.jpg", caption: "Step 3: the fairing as flat colored panels, before it was smoothed into the final shell" }
+      ],
+      tools: "Blender, 3D Modeling, Hard-Surface Modeling, Shading & Materials, Lighting & Rendering",
+      role: "Personal 3D modeling project, built and rendered in Blender",
+      points: [
+        "I've always loved **designing vehicles, especially motorcycles and cars**, and this hyperbike is one I **built myself in Blender**. I used a concept model of the **2027 Koenigsegg Brutemera** as my reference and modeled every part on my own, from the first frame tube to the drilled brake rotors.",
+        "I started with the **tubular frame, swingarm, forks, and wheels**, with plain blocks standing in for the engine, so I could get the stance right before anything else. Then I shaped the bodywork as flat faceted panels, checked the proportions in a clay render, and smoothed it into the **glossy fairing** you see in the final renders.",
+        "For the look, I followed a tutorial on **shading and coloring** and used it to build my own palette of dark gunmetal paint, **chrome and carbon fiber** on the frame and fenders, and **copper** on the hubs, brake carriers, and the pinstripes that run along the fairing.",
+        "The details took the longest, and they were my favorite part. I modeled the **chain and sprockets**, the finned engine cylinders, and the exhaust tucked under the bike, then lit everything in a studio setup and rendered it from **three angles** so you can see how the pieces fit together."
       ]
     }
   ];
@@ -1127,7 +1150,6 @@
   };
 
   // Photos and videos are hosted in the "portfolio" repository on GitHub
-  const MEDIA_BASE = "https://huanghannah123.github.io/portfolio/";
   // Art: titles, mediums, sizes (height × width) and statements are Hannah's own. w/h: pixel size of the photo.
   const ART = {
     paintings: [
@@ -1188,7 +1210,7 @@
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
   const rich = s => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-  const url = f => /^(data:|embed\/)/.test(f) ? f : MEDIA_BASE + encodeURIComponent(f);
+  const url = f => /^(data:|embed\/|https?:)/.test(f) ? f : encodeURIComponent(f);
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const calmGallery = calm;
   const figure = m => /\.(mp4|webm|mov)$|^data:video/i.test(m.src)
@@ -1204,7 +1226,7 @@
     <li class="entry proj" id="${esc(e.id)}">
       <div class="proj-head">
         <span class="proj-num" aria-hidden="true">${k + 2}</span>
-        <div class="proj-name"><h3>${esc(e.org)}</h3><span class="proj-meta">${esc(e.date)}, ${esc(e.place)}</span></div>
+        <div class="proj-name"><h3>${esc(e.org)}</h3><span class="proj-meta">${esc([e.date, e.place].filter(Boolean).join(", "))}</span></div>
         ${btn}
       </div>
       <div class="entry-body">

@@ -68,6 +68,7 @@ STEMportfolio/
 ├── og-image.jpg                # link preview image (Medi-Pod sketch)
 ├── medipod-drawing-sheet-*.jpg # Medi-Pod engineering drawings
 ├── stroke-by-stroke.jpg        # featured painting
+├── hyperbike-*.jpg             # Blender hyperbike renders
 ├── morningsun-art/             # artwork photographs
 └── docs/preview.jpg            # screenshot used in this README
 ```
