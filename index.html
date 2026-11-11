@@ -1689,7 +1689,8 @@
       { go: () => artTile("Chasing Daylight"), where: "Art", src: p("Chasing Daylight").src, label: "Chasing Daylight", caption: "Chasing Daylight. Oil Paint, 24 × 20 in, 2026", ar: p("Chasing Daylight").w / p("Chasing Daylight").h, d: [82, 3, 15, 5], m: [57, 25, 38, 5] },
       { go: () => artTile("Process Board I"), where: "Art", src: d("Process Board I").src, label: "Process Board I", caption: "Process Board I. Pencil, Ink pen, 18 × 24 in, 2026", ar: d("Process Board I").w / d("Process Board I").h, d: [12, 50, 28, 3], m: [4, 50, 54, 3] },
       { go: () => artTile("Product sketches"), where: "Art", src: d("Product sketches").src, label: "Product sketches", caption: "Product sketches over construction boxes: earbud case, perfume bottle, sports car", ar: d("Product sketches").w / d("Product sketches").h, d: [44, 46, 15, -6], m: [61, 49, 34, -5] },
-      { go: () => artTile("VeeVee's Carapace"), where: "Art", src: p("VeeVee's Carapace").src, label: "VeeVee's Carapace", caption: "VeeVee's Carapace. Oil Paint, 20 × 24 in, 2026", ar: p("VeeVee's Carapace").w / p("VeeVee's Carapace").h, d: [60, 50, 19, 2], m: [6, 72, 42, 2] }
+      { go: () => artTile("VeeVee's Carapace"), where: "Art", src: p("VeeVee's Carapace").src, label: "VeeVee's Carapace", caption: "VeeVee's Carapace. Oil Paint, 20 × 24 in, 2026", ar: p("VeeVee's Carapace").w / p("VeeVee's Carapace").h, d: [60, 50, 19, 2], m: [6, 72, 42, 2] },
+      { go: () => document.getElementById("hyperbike"), where: "STEM", src: "hyperbike-render.jpg", label: "Hyperbike", caption: "2027 Koenigsegg Brutemera hyperbike, modeled and rendered in Blender", ar: 1872 / 1374, d: [80, 41, 18, -3], m: [52, 72, 44, 3] }
     ];
     let top = 10;
     const items = ITEMS.map(it => {
@@ -1783,7 +1784,7 @@
     });
 
     // Ticker of project and artwork titles along the bottom
-    const names = ["Medi-Pod", "Gyroscope cup holder", ...ART.paintings.map(m => m.title), ...ART.drawings.filter(m => m.size).map(m => m.title)];
+    const names = ["Medi-Pod", "Gyroscope cup holder", "Hyperbike", ...ART.paintings.map(m => m.title), ...ART.drawings.filter(m => m.size).map(m => m.title)];
     const row = names.map(n => `<span><i>${esc(n)}</i></span>`).join("");
     document.getElementById("ticker").innerHTML = row + row;
   })();
