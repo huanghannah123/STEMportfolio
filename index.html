@@ -818,14 +818,9 @@
       <div class="spin-row"></div>
       <div class="spin-row"></div>
     </div>
-    <p class="cap spin-note">My paintings and drawings on one wheel. Drag it to spin, or select a piece to see it full size.</p>
+    <p class="cap spin-note">My paintings and drawings on one wheel. Drag it to spin, or select a piece to find it in my art portfolio.</p>
   </section>
 
-  <div class="switch" role="tablist" aria-label="Portfolio">
-    <a class="switch-btn" role="tab" href="#stem" aria-controls="stem" aria-selected="true"><span class="switch-name">STEM</span><span class="switch-note">Medi-Pod, engineering programs, and 3D modeling</span></a>
-    <a class="switch-btn" role="tab" href="#art" aria-controls="art" aria-selected="false"><span class="switch-name">Art</span><span class="switch-note">Paintings and drawings</span></a>
-    <a class="switch-btn" role="tab" href="#contact" aria-controls="contact" aria-selected="false"><span class="switch-name">Contact</span><span class="switch-note">Email and LinkedIn</span></a>
-  </div>
 
   <div class="chapter" id="stem" data-panel>
     <header class="chapter-head">
@@ -1392,8 +1387,8 @@
         let x = 0;
         for (let c = 0; c < copies; c++) row.set.forEach((p, k) => {
           const b = document.createElement("button");
-          b.type = "button"; b.className = "spin-tile"; b.dataset.i = p.i;
-          b.setAttribute("aria-label", "Open " + p.alt);
+          b.type = "button"; b.className = "spin-tile"; b.dataset.go = p.i;
+          b.setAttribute("aria-label", "Go to " + p.alt + " in the Art portfolio");
           if (c) { b.tabIndex = -1; b.setAttribute("aria-hidden", "true"); }   // keyboard reaches each piece once
           b.innerHTML = `<img src="${p.src}" alt="" decoding="async" loading="lazy" draggable="false">`;
           b.style.width = widths[k] + "px";
@@ -1462,6 +1457,19 @@
     };
     spin.addEventListener("pointerup", release); spin.addEventListener("pointercancel", release);
     spin.addEventListener("click", e => { if (spin._dragged) { spin._dragged = false; e.stopPropagation(); e.preventDefault(); } }, true);
+    // Selecting a piece opens the Art portfolio, scrolls to that piece, and flashes it so it's easy to spot
+    spin.addEventListener("click", e => {
+      const b = e.target.closest(".spin-tile"); if (!b) return;
+      const tile = document.querySelector(`.board [data-i="${b.dataset.go}"]`);
+      const t = tile && (tile.closest(".art") || tile);
+      if (!t) return;
+      if (window.__showPanel) window.__showPanel("art");
+      requestAnimationFrame(() => {
+        t.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
+        t.classList.remove("flash"); void t.offsetWidth; t.classList.add("flash");
+        setTimeout(() => t.classList.remove("flash"), 2200);
+      });
+    });
 
     build();
     let lastW = spin.clientWidth;
@@ -2005,8 +2013,8 @@
   // Switch: STEM, Art and Contact share the space under the hero, one at a time, so nothing is a long scroll away.
   // The top nav and every in-page link go through the same switch. The chosen panel is also marked in the nav.
   const panels = [...document.querySelectorAll("[data-panel]")];
-  const switchBar = document.querySelector(".switch");
-  const switchBtns = [...switchBar.querySelectorAll(".switch-btn")];
+  const switchBar = document.querySelector(".switch");   // removed from the page; the top nav does this job now
+  const switchBtns = switchBar ? [...switchBar.querySelectorAll(".switch-btn")] : [];
   const smooth = calm ? "auto" : "smooth";
   const showPanel = id => {
     const was = panels.find(p => !p.hidden);
@@ -2022,7 +2030,7 @@
     if (!panel) return false;
     showPanel(panel.id);
     if (target !== panel) target.scrollIntoView({ behavior: smooth, block: "start" });
-    else if (!fromSwitch || switchBar.getBoundingClientRect().top < 0) switchBar.scrollIntoView({ behavior: smooth, block: "start" });
+    else panel.scrollIntoView({ behavior: smooth, block: "start" });
     return true;
   };
   document.addEventListener("click", e => {
@@ -2032,7 +2040,7 @@
     if (target && reveal(target, a.classList.contains("switch-btn"))) e.preventDefault();
   });
   // Arrow keys move between the three buttons, like a segmented control
-  switchBar.addEventListener("keydown", e => {
+  if (switchBar) switchBar.addEventListener("keydown", e => {
     const k = switchBtns.indexOf(document.activeElement);
     if (k < 0 || (e.key !== "ArrowRight" && e.key !== "ArrowLeft")) return;
     e.preventDefault();
@@ -2045,7 +2053,7 @@
     const panel = t && t.closest("[data-panel]");
     showPanel(panel ? panel.id : "stem");
     if (panel && t !== panel) requestAnimationFrame(() => t.scrollIntoView({ block: "start" }));
-    else if (panel) requestAnimationFrame(() => switchBar.scrollIntoView({ block: "start" }));
+    else if (panel) requestAnimationFrame(() => panel.scrollIntoView({ block: "start" }));
   })();
 
   // The stamp settles into place once on load. Grab it to spin it: it follows your finger from where you took hold,
