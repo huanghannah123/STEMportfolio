@@ -999,20 +999,18 @@
       place: "Personal project",
       link: { href: "#hyperbike-photos", text: "Renders ↓" },
       media: [
-        { src: "hyperbike-render.jpg", caption: "Final render, front three-quarter view: a glossy fairing over the tubular frame, with copper brake and wheel hubs and a chain drive" },
-        { src: "hyperbike-rear.jpg", caption: "Rear three-quarter view showing the swingarm, rear sprocket, and carbon rear fender" },
-        { src: "hyperbike-side.jpg", caption: "Left side of the finished model" },
-        { src: "hyperbike-frame.jpg", caption: "Step 1: the bare frame, with forks, swingarm, wheels, and placeholder blocks for the engine" },
-        { src: "hyperbike-clay.jpg", caption: "Step 2: a plain clay render to check the shape of the faceted bodywork" },
-        { src: "hyperbike-blockout.jpg", caption: "Step 3: the fairing as flat colored panels, before it was smoothed into the final shell" }
+        { src: "hyperbike-render.jpg", caption: "Final render. The glossy fairing sits over a chrome tubular frame, with copper pinstripes, hubs, and brake carriers behind drilled brake rotors" },
+        { src: "hyperbike-rear.jpg", caption: "Rear view of the chain, sprockets, swingarm, and carbon rear fender" },
+        { src: "hyperbike-side.jpg", caption: "Left side, with the finned engine cylinders and the exhaust tucked under the bike" },
+        { src: "hyperbike-frame.jpg", caption: "Step 1: the frame, swingarm, forks, and wheels, with plain blocks standing in for the engine so I could set the stance first" },
+        { src: "hyperbike-clay.jpg", caption: "Step 2: the bodywork as flat faceted panels, checked in a clay render for proportions" },
+        { src: "hyperbike-blockout.jpg", caption: "Step 3: the faceted fairing in color, before I smoothed it into the final glossy shell" }
       ],
       tools: "Blender, 3D Modeling, Hard-Surface Modeling, Shading & Materials, Lighting & Rendering",
       role: "Personal 3D modeling project, built and rendered in Blender",
       points: [
-        "I've always loved **designing vehicles, especially motorcycles and cars**, and this hyperbike is one I **built myself in Blender**. I used a concept model of the **2027 Koenigsegg Brutemera** as my reference and modeled every part on my own, from the first frame tube to the drilled brake rotors.",
-        "I started with the **tubular frame, swingarm, forks, and wheels**, with plain blocks standing in for the engine, so I could get the stance right before anything else. Then I shaped the bodywork as flat faceted panels, checked the proportions in a clay render, and smoothed it into the **glossy fairing** you see in the final renders.",
-        "For the look, I followed a tutorial on **shading and coloring** and used it to build my own palette of dark gunmetal paint, **chrome and carbon fiber** on the frame and fenders, and **copper** on the hubs, brake carriers, and the pinstripes that run along the fairing.",
-        "The details took the longest, and they were my favorite part. I modeled the **chain and sprockets**, the finned engine cylinders, and the exhaust tucked under the bike, then lit everything in a studio setup and rendered it from **three angles** so you can see how the pieces fit together."
+        "I've always loved **designing vehicles, especially motorcycles and cars**. I **built this hyperbike myself in Blender**, using a concept model of the **2027 Koenigsegg Brutemera** as my reference.",
+        "I worked from the **bare frame out to the fairing**, then followed a tutorial on **shading and coloring** to make my own palette of gunmetal, chrome, carbon fiber, and copper. Select a render to zoom in on the details."
       ]
     }
   ];
@@ -1299,14 +1297,14 @@
   GROUP = "drawings";
   document.getElementById("drawing-board").innerHTML = boardHTML(ART.drawings);
 
-  // Cooper Union photos join the viewer too, so every photo on the page behaves the same way
-  GROUP = "cooper";
-  document.querySelectorAll(".gallery .frame > img").forEach(img => {
+  // Project photos (Cooper Union, Hyperbike) join the viewer too, so every photo on the page behaves the same way.
+  // Each gallery is its own set, so Previous / Next stay inside one project.
+  document.querySelectorAll(".gallery").forEach(gal => { GROUP = gal.id; gal.querySelectorAll(".frame > img, a > img").forEach(img => {
     const i = VIEW.push({ src: img.getAttribute("src"), caption: img.alt, g: GROUP }) - 1;
     const b = document.createElement("button");
     b.type = "button"; b.className = "frame"; b.dataset.i = i; b.setAttribute("aria-label", "Enlarge: " + img.alt);
-    img.parentNode.replaceWith(b); b.appendChild(img);
-  });
+    img.removeAttribute("loading"); img.parentNode.replaceWith(b); b.appendChild(img);
+  }); });
 
   /* ---------- Springs ----------
      Two designer-facing numbers, as in Apple's motion work: damping ratio (1 = no overshoot, lower = bouncier)
