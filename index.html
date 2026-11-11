@@ -695,7 +695,8 @@
   @media (max-width: 480px) { .proj .gallery { grid-template-columns: 1fr; } }
 
   /* Art: a curved, always-turning gallery of every piece (inspired by futadesign.com) */
-  .spin-wrap { margin: 0 0 clamp(2rem, 5vw, 3.5rem); }
+  .spin-wrap { margin: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2.5rem, 6vw, 4rem); scroll-margin-top: 5rem; }
+  .gallery-title { margin: 0 0 clamp(1rem, 2.5vw, 1.75rem); }
   .spin { position: relative; perspective: 1100px; display: grid; gap: 1rem; overflow: hidden; touch-action: pan-y; cursor: grab;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
   .spin.grabbing { cursor: grabbing; }
@@ -811,6 +812,15 @@
     </div>
   </header>
 
+  <section class="spin-wrap" id="gallery" aria-labelledby="gallery-title">
+    <h2 class="chapter-title gallery-title" id="gallery-title">The Gallery</h2>
+    <div class="spin" id="art-spin">
+      <div class="spin-row"></div>
+      <div class="spin-row"></div>
+    </div>
+    <p class="cap spin-note">My paintings and drawings on one wheel. Drag it to spin, or select a piece to see it full size.</p>
+  </section>
+
   <div class="switch" role="tablist" aria-label="Portfolio">
     <a class="switch-btn" role="tab" href="#stem" aria-controls="stem" aria-selected="true"><span class="switch-name">STEM</span><span class="switch-note">Medi-Pod, engineering programs, and 3D modeling</span></a>
     <a class="switch-btn" role="tab" href="#art" aria-controls="art" aria-selected="false"><span class="switch-name">Art</span><span class="switch-note">Paintings and drawings</span></a>
@@ -901,14 +911,6 @@
         <ol class="proj-index two" id="art-index" aria-label="Art"></ol>
       </div>
     </header>
-
-  <section class="spin-wrap" aria-label="All of my paintings and drawings, in a moving gallery">
-    <div class="spin" id="art-spin">
-      <div class="spin-row"></div>
-      <div class="spin-row"></div>
-    </div>
-    <p class="cap spin-note">Every painting and drawing on one wheel. Drag it to spin, or select a piece to see it full size.</p>
-  </section>
 
   <section id="paintings" class="art-sec">
     <div class="row">
